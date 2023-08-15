@@ -24,7 +24,11 @@ change name of public -> index.html to Crypto Kings
 ## STEP 3
 delete boiler plate React App.js and preloaded styles in App.css and render basic Hello World
 
+## STEP 4
+Wrap App.js in BrowserRouter and import it.
 
+## STEP 5 :
+Create Components (Header)
 
 
 
