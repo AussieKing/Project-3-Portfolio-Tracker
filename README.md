@@ -3,6 +3,7 @@
 ## TECHNOLOGIES USED:
 - React Router DOM
 - Material UI as React Library 
+- GoogleFonts (https://fonts.google.com/specimen/Inconsolata) - 300, 400, 800
 
 ## DEPENDENCIES:
 - React Router DOM
@@ -28,7 +29,13 @@ delete boiler plate React App.js and preloaded styles in App.css and render basi
 Wrap App.js in BrowserRouter and import it.
 
 ## STEP 5 :
-Create Components (Header)
+Create Components (Header), and Pages (CoinPage and HomePage);
+
+## STEP 6 : 
+setup Styles in MaterialUI (create classname, provide styles inside of it, create an object for classes, and provide it to the classname)
+
+## STEP 7 :
+Header (app bar) : style and render with select drop down component, and wrap the header in the ThemeProvider dark mode.
 
 
 
