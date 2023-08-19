@@ -5,6 +5,7 @@
 - Material UI as React Library 
 - GoogleFonts (https://fonts.google.com/specimen/Inconsolata) - 300, 400, 800
 - Unsplash (Banner image by Javier Miranda https://unsplash.com/photos/MrWOCGKFVDg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink )
+- Coingecko API : (https://www.coingecko.com/en/api)
 
 ## DEPENDENCIES:
 - React Router DOM
@@ -49,8 +50,12 @@ Create Crypto context provider and wrap the whole app in in it, and make sure th
 
 ## STEP 11 :
 Homepage bulding. divided in 2 parts : 
-    1) BANNER .
-<!-- TODO : import of image not working -->
+    1) BANNER:
+    styling [x]
+    <!-- TODO : import of image not working -->
+    carousel []
+    API []
+
 
     2) COINS PORTION
 
