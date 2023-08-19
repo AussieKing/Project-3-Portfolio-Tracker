@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Typography } from "@mui/material";
+import Carousel from "./Carousel";
 
 const Banner = () => {
   return (
@@ -47,6 +48,7 @@ const Banner = () => {
             Keep up to date with the latest crypto price action
           </Typography>
         </div>
+        <Carousel />
       </Container>
     </div>
   );
