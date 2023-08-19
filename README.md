@@ -51,10 +51,10 @@ Create Crypto context provider and wrap the whole app in in it, and make sure th
 ## STEP 11 :
 Homepage bulding. divided in 2 parts : 
     1) BANNER:
-    styling [x]
+        a. styling [x]
     <!-- TODO : import of image not working -->
-    carousel []
-    API []
+        b. carousel []
+        c. API [x]
 
 
     2) COINS PORTION

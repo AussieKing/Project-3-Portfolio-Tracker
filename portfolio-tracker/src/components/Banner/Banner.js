@@ -4,13 +4,20 @@ import Carousel from "./Carousel";
 
 const Banner = () => {
   return (
+    // TODO: image not rendering -------------------------
     <div
-      sx={{  //! TODO : import of image not working
-        backgroundImage: "url(./images/banner.jpg)",
+      sx={{
+        backgroundImage: "url(/banner.jpeg)",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        height: "400px",
+        width: "100%",
+        backgroundColor: "red",
       }}
     >
       <Container
-        sx={{  // container styling
+        sx={{
+          // container styling
           height: 400,
           display: "flex",
           flexDirection: "column",
@@ -19,7 +26,8 @@ const Banner = () => {
         }}
       >
         <div
-          sx={{  // tagline styling
+          sx={{
+            // tagline styling
             display: "flex",
             height: "40%",
             flexDirection: "column",
@@ -28,7 +36,7 @@ const Banner = () => {
           }}
         >
           <Typography
-            variant="h2"  // font styling
+            variant="h2" // font styling
             sx={{
               fontWeight: "bold",
               marginBottom: 15,
@@ -38,7 +46,7 @@ const Banner = () => {
             Crypto Kings
           </Typography>
           <Typography
-            variant="subtitle2"  // font styling for subtitle
+            variant="subtitle2" // font styling for subtitle
             sx={{
               color: "darkgrey",
               textTransform: "capitalize",
@@ -48,7 +56,8 @@ const Banner = () => {
             Keep up to date with the latest crypto price action
           </Typography>
         </div>
-        <Carousel />
+{/* UP TO HERE: Carousel component  */}
+        <Carousel />  
       </Container>
     </div>
   );
