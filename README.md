@@ -41,10 +41,15 @@ Header (app bar) : style and render with select drop down component, and wrap th
 Setup Context API (file in Pages) to set the state at the beginning. We'll use context API also in the Crypto Context.
 
 ## STEP 9 :
-Import our State to Hold off our App
+Import our State
 
 ## STEP 10 : 
-Create Crypto context provider and wrap the whole app in in it
+Create Crypto context provider and wrap the whole app in in it, and make sure the state changes for all the currency toggling.
+
+## STEP 11 :
+Homepage bulding. divided in 2 parts : 
+1) BANNER
+2) COINS PORTION
 
 
 
