@@ -37,6 +37,15 @@ setup Styles in MaterialUI (create classname, provide styles inside of it, creat
 ## STEP 7 :
 Header (app bar) : style and render with select drop down component, and wrap the header in the ThemeProvider dark mode.
 
+## STEP 8 :
+Setup Context API (file in Pages) to set the state at the beginning. We'll use context API also in the Crypto Context.
+
+## STEP 9 :
+Import our State to Hold off our App
+
+## STEP 10 : 
+Create Crypto context provider and wrap the whole app in in it
+
 
 
 
