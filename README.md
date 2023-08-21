@@ -6,6 +6,7 @@
 - GoogleFonts (https://fonts.google.com/specimen/Inconsolata) - 300, 400, 800
 - Unsplash (Banner image by Javier Miranda https://unsplash.com/photos/MrWOCGKFVDg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink )
 - Coingecko API : (https://www.coingecko.com/en/api)
+- Axios : to handle API requests (https://www.npmjs.com/package/axios)
 
 ## DEPENDENCIES:
 - React Router DOM
