@@ -2,11 +2,12 @@
 
 ## TECHNOLOGIES USED:
 - React Router DOM
-- Material UI as React Library 
+- Material UI as React Library (https://mui.com/)
 - GoogleFonts (https://fonts.google.com/specimen/Inconsolata) - 300, 400, 800
 - Unsplash (Banner image by Javier Miranda https://unsplash.com/photos/MrWOCGKFVDg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink )
 - Coingecko API : (https://www.coingecko.com/en/api)
 - Axios : to handle API requests (https://www.npmjs.com/package/axios)
+- React Alice Carousel: npm i react-alice-carousel (https://www.npmjs.com/package/react-alice-carousel)
 
 ## DEPENDENCIES:
 - React Router DOM
@@ -56,9 +57,15 @@ Homepage bulding. divided in 2 parts :
     <!-- TODO : import of image not working -->
         b. carousel []
         c. API [x]
+        d. carousel [x]
 
 
     2) COINS PORTION
+
+## STEP 12 :
+Carousel.
+via `npm i react-alice-carousel`
+import `import "react-alice-carousel/lib/alice-carousel.css";` in index.js;
 
 
 
