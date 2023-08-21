@@ -9,6 +9,6 @@ export const SingleCoin = (id) =>
 export const HistoricalChart = (id, days = 365, currency) =>
   `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`;
 
-// The following API is used to get the trending coins: it takes the currency as a parameter and returns the top 10 trending coins in the last 24 hours.
-export const TrendingCoins = (currency) =>
+// The following API is used to get the trending coins: it takes the ${currency} as a parameter and returns the top 10 trending coins in the last 24 hours.
+export const TrendingCoins = (currency) =>  // endpoint for trending coins : TrendingCoins
   `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=gecko_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h`;
