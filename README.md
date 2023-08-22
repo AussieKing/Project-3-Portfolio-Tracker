@@ -94,3 +94,7 @@ Include Authentication (JWT) - []
 
 ## ADD-ON :
 Add STRIPE to take donations - []
+
+
+## ISUES FACED:
+- commentary : I was trying to leave as many comments as possible, but turns out that that can lead to a tonne of warnings. So I had to remove some of them. I'll try to add as many as possible.
