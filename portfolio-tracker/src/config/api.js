@@ -1,5 +1,6 @@
 // Coingecko APIs for price Action.
 
+// This API is used to get the list of all the coins: it takes the ${currency} as a parameter and returns the top 100 coins in descending order of market cap.
 export const CoinList = (currency) =>
   `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=100&page=1&sparkline=false`;
 
