@@ -4,7 +4,7 @@ import AliceCarousel from "react-alice-carousel";  // carousel npm package
 import { TrendingCoins } from "../../config/api";
 import { CryptoState } from "../../Pages/CryptoContext";
 import { Box } from "@mui/system";
-import { styled } from '@mui/system';
+import { styled } from '@mui/system';  // to style the Link component
 import { Link as RouterLink } from 'react-router-dom';
 
 // function to add price to the carousel coins, via a RegEx (thanks google!)
