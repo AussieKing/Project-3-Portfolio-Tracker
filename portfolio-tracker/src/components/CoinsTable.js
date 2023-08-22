@@ -18,29 +18,32 @@ import {
   Typography,
 } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
+import { numberWithCommas } from "./Banner/Carousel";
 
 const CoinsTable = () => {
-// Create states for the coins, loading, search and navigation
+  // Create states for the coins, loading, search and navigation
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();    // need the navigate prop to navigate from one page to another
-  const { currency } = CryptoState();  // Get the currency from the CryptoState hook
+  const navigate = useNavigate(); // need the navigate prop to navigate from one page to another
+  const { currency } = CryptoState(); // Get the currency from the CryptoState hook
 
   // Create a function to fetch the data from the API:
   // We receive data/currency from the API, and we destructure { } the data to get the coins
   // Use useEffect to fetch the data from the API when the component mounts
-  useEffect(() => {  
-    const fetchCoins = async () => {  // calling the fetchCoins function inside the useEffect hook
+  useEffect(() => {
+    const fetchCoins = async () => {
+      // calling the fetchCoins function inside the useEffect hook
 
-      setLoading(true);   // Set loading to true so that we can display a loading message while the data is being fetched
-    // use try catch to fetch the data from the API, and make sure to await the data (using async above)
+      setLoading(true); // Set loading to true so that we can display a loading message while the data is being fetched
+      // use try catch to fetch the data from the API, and make sure to await the data (using async above)
       try {
         const { data } = await axios.get(CoinList(currency));
-        setCoins(data);  // Set the data that we received from the API to the coins state
+        setCoins(data); // Set the data that we received from the API to the coins state
       } catch (error) {
         console.error("Error fetching coins:", error);
-      } finally {  // once the data is fetched, set loading to false
+      } finally {
+        // once the data is fetched, set loading to false
         setLoading(false);
       }
     };
@@ -64,7 +67,7 @@ const CoinsTable = () => {
   const handleSearch = () => {
     return coins.filter(
       (coin) =>
-        coin.name.toUpperCase().includes(search.toUpperCase()) ||
+        coin.name.toLowerCase().includes(search.toLowerCase()) ||
         coin.symbol.toLowerCase().includes(search.toLowerCase())
     );
   };
@@ -79,7 +82,10 @@ const CoinsTable = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <Container style={{ textAlign: "center" }}>
-        <Typography variant="h4" style={{ margin: 18, fontFamily: "Monserrat" }}>
+        <Typography
+          variant="h4"
+          style={{ margin: 18, fontFamily: "Monserrat" }}
+        >
           Top 100 Cryptocurrencies by Market Cap
         </Typography>
 
@@ -101,27 +107,67 @@ const CoinsTable = () => {
                     <TableCell
                       key={head}
                       align={head === "Coin" ? "left" : "right"}
-                      style={{ color: "black", fontWeight: "700", fontFamily: "Montserrat" }}
+                      style={{
+                        color: "black",
+                        fontWeight: "700",
+                        fontFamily: "Montserrat",
+                      }}
                     >
                       {head}
                     </TableCell>
                   ))}
                 </TableRow>
               </TableHead>
+
               <TableBody>
                 {handleSearch().map((row) => {
                   const profit = row.price_change_percentage_24h > 0;
+
                   return (
-                    <StyledRow onClick={() => navigate(`/coins/${row.id}`)} key={row.name}>
-                      <TableCell component="th" scope="row" style={{ display: "flex", gap: 15, fontFamily: "Montserrat" }}>
-                        {row.name}
-                        <img src={row.image} height="50" alt={row.name} style={{ marginBottom: 10 }} />
+                    <StyledRow
+                      onClick={() => navigate(`/coins/${row.id}`)}
+                      key={row.name}
+                    >
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{
+                          display: "flex",
+                          gap: "15px",
+                        }}
+                      >
+                        <img
+                          src={row?.image}
+                          alt={row.name}
+                          height="50"
+                          sx={{ marginBottom: "10px" }}
+                        />
+                        <div sx={{ display: "flex", flexDirection: "column" }}>
+                          <span
+                            style={{
+                              textTransform: "uppercase",
+                              fontSize: "22px",
+                            }}
+                          >
+                            {row.symbol}
+                          </span>
+                            <br />
+                          <span sx={{ color: "darkgrey" }}>{row.name}</span>
+                        </div>
                       </TableCell>
-                      <TableCell align="right">{row.current_price}</TableCell>
-                      <TableCell align="right" style={{ color: profit ? "green" : "red" }}>
+                      <TableCell align="right" style={{ fontWeight: 500 }}>
+                        {Symbol}{" "}
+                        {numberWithCommas(row.current_price.toFixed(2))}
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        style={{ color: profit ? "green" : "red" }}
+                      >
                         {row.price_change_percentage_24h.toFixed(2)}%
                       </TableCell>
-                      <TableCell align="right">{row.market_cap}</TableCell>
+                      <TableCell align="right">
+                        {row.market_cap.toString().slice(0, -6)}M
+                      </TableCell>
                     </StyledRow>
                   );
                 })}
