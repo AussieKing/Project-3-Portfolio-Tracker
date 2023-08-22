@@ -20,55 +20,33 @@ import {
 import { ThemeProvider } from "@emotion/react";
 
 const CoinsTable = () => {
-  // Create states
-  const [coins, setCoins] = useState([]); // state for the coins
-  const [loading, setLoading] = useState(false); // state for the loading message
-  const [search, setSearch] = useState(""); // state for the search bar
-
-  // need the navigate prop to navigate from one page to another
-  const navigate = useNavigate();
-
-  // Get the currency from the CryptoState
-  const { currency } = CryptoState();
+// Create states for the coins, loading, search and navigation
+  const [coins, setCoins] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();    // need the navigate prop to navigate from one page to another
+  const { currency } = CryptoState();  // Get the currency from the CryptoState hook
 
   // Create a function to fetch the data from the API:
   // We receive data/currency from the API, and we destructure { } the data to get the coins
-  const fetchCoins = async () => {
-    setLoading(true); // Set loading to true so that we can display a loading message while the data is being fetched
-
-    // use try catch to fetch the data from the API, and make sure to await the data (use async)
-    try {
-      const { data } = await axios.get(CoinList(currency));
-      setCoins(data); // Set the data that we received from the API to the coins state
-    } catch (error) {
-      console.error("Error fetching coins:", error);
-      // Optionally set some state to indicate the error to the user
-    } finally {
-      setLoading(false); // Set loading to false once the data is fetched
-    }
-  };
-
-  console.log(coins); // Check the coins state in the console
-
   // Use useEffect to fetch the data from the API when the component mounts
-  useEffect(() => {
+  useEffect(() => {  
     const fetchCoins = async () => {  // calling the fetchCoins function inside the useEffect hook
-        setLoading(true);  // Set loading to true so that we can display a loading message while the data is being fetched
 
-        try {   // use try catch to fetch the data from the API, and make sure to await the data (using async above)
-            const { data } = await axios.get(CoinList(currency));
-            setCoins(data);  // Set the data that we received from the API to the coins state
-        } catch (error) {  // catch the error if there is one
-            console.error("Error fetching coins:", error);
-            // Optionally set some state to indicate the error to the user
-        } finally {   // once the data is fetched, set loading to false
-            setLoading(false);
-        }
+      setLoading(true);   // Set loading to true so that we can display a loading message while the data is being fetched
+    // use try catch to fetch the data from the API, and make sure to await the data (using async above)
+      try {
+        const { data } = await axios.get(CoinList(currency));
+        setCoins(data);  // Set the data that we received from the API to the coins state
+      } catch (error) {
+        console.error("Error fetching coins:", error);
+      } finally {  // once the data is fetched, set loading to false
+        setLoading(false);
+      }
     };
-  
-    fetchCoins();  // call the fetchCoins function
-}, [currency]);  // and pass the currency as a dependency
 
+    fetchCoins();
+  }, [currency]);
 
   // import the dark theme, same as in Header.js
   const darkTheme = createTheme({
@@ -90,8 +68,7 @@ const CoinsTable = () => {
         coin.symbol.toLowerCase().includes(search.toLowerCase())
     );
   };
-
-  // create the styles for the table rows
+  // create a styled row to display the coins in the table
   const StyledRow = styled(TableRow)(({ theme }) => ({
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
@@ -102,91 +79,49 @@ const CoinsTable = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <Container style={{ textAlign: "center" }}>
-        <Typography
-          variant="h4"
-          style={{ margin: 18, fontFamily: "Monserrat" }}
-        >
+        <Typography variant="h4" style={{ margin: 18, fontFamily: "Monserrat" }}>
           Top 100 Cryptocurrencies by Market Cap
         </Typography>
 
-        {/* Search bar */}
         <TextField
           label="Search for a Cryptocurrency"
           variant="outlined"
           style={{ width: "100%", marginBottom: 20 }}
-          onChange={(e) => setSearch(e.target.value)} // so that the search bar is updated as the user types in it
+          onChange={(e) => setSearch(e.target.value)}
         />
 
         <TableContainer>
-          {loading ? ( // If loading is true, display a loading component from Material UI
-            <CircularProgress style={{ display: "flex" }}></CircularProgress>
+          {loading ? (
+            <CircularProgress style={{ display: "flex" }} />
           ) : (
-            // if loading is false, display the table with the data
             <Table aria-label="simple table">
-              {/* Header */}
               <TableHead style={{ backgroundColor: "#EEBC1D" }}>
                 <TableRow>
-                  {/* Displaying the name, current price, 24h change, and market cap of the coins, then we map through the array of coins and display the data for each coin in a row of the table  */}
                   {["Coin", "Price", "24h Change", "Market Cap"].map((head) => (
                     <TableCell
-                      key={head} // key is required when mapping through an array
-                      align={head === "Coin" ? "" : "right"} // and align the data to the right leaving more space for the coin name
-                      style={{
-                        color: "black",
-                        fontWeight: "700",
-                        fontFamily: "Montserrat",
-                      }}
+                      key={head}
+                      align={head === "Coin" ? "left" : "right"}
+                      style={{ color: "black", fontWeight: "700", fontFamily: "Montserrat" }}
                     >
                       {head}
                     </TableCell>
                   ))}
                 </TableRow>
               </TableHead>
-              {/* Body */}
               <TableBody>
-                {/* Map through the coins array and display the data for each coin in a row of the table */}
-                {/* need to map through the handleSearch function to display the coins that match the search, otherwise it would display all the coins */}
                 {handleSearch().map((row) => {
-                  const profit = row.price_change_percentage_24h > 0; // if the price change is greater than 0, it is a profit
-                  // and render the data in the table
+                  const profit = row.price_change_percentage_24h > 0;
                   return (
-                    <StyledRow
-                      onClick={() => navigate(`/coins/${row.id}`)} // when the user clicks on a row, navigate to the coin details page by using the useHistory hook and the coin id
-                      key={row.name} // key is required when mapping through an array
-                    >
-                      {/* This is the tablecell for the coin name amd the image */}
-                      <TableCell
-                        component="th"
-                        scope="row" // th for table header and the purpose is row
-                        style={{
-                          display: "flex",
-                          gap: 15,
-                          fontFamily: "Montserrat",
-                        }}
-                      >
-                        {row.name} {/* display the name of the coin */}
-                        <img
-                          src={row.image}
-                          height="50"
-                          alt={row.name}
-                          style={{ marginBottom: 10 }}
-                        />{" "}
-                        {/* display the image of the coin */}
+                    <StyledRow onClick={() => navigate(`/coins/${row.id}`)} key={row.name}>
+                      <TableCell component="th" scope="row" style={{ display: "flex", gap: 15, fontFamily: "Montserrat" }}>
+                        {row.name}
+                        <img src={row.image} height="50" alt={row.name} style={{ marginBottom: 10 }} />
                       </TableCell>
-                      {/* This is the tablecell for the current price of the coin */}
-                      <TableCell align="right">{row.current_price}</TableCell>{" "}
-                      {/* display the current price of the coin */}
-                      {/* This is the tablecell for the 24h change of the coin */}
-                      <TableCell
-                        align="right"
-                        style={{ color: profit ? "green" : "red" }} // if the price change is greater than 0, it is a profit in green, otherwise it is a loss in red
-                      >
-                        {row.price_change_percentage_24h.toFixed(2)}%{" "}
-                        {/* display the % change in the last 24 hours, displaying 2 decimals */}
+                      <TableCell align="right">{row.current_price}</TableCell>
+                      <TableCell align="right" style={{ color: profit ? "green" : "red" }}>
+                        {row.price_change_percentage_24h.toFixed(2)}%
                       </TableCell>
-                      {/* This is the tablecell for the market cap of the coin */}
-                      <TableCell align="right">{row.market_cap}</TableCell>{" "}
-                      {/* display the market cap of the coin */}
+                      <TableCell align="right">{row.market_cap}</TableCell>
                     </StyledRow>
                   );
                 })}
