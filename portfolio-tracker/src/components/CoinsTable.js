@@ -52,8 +52,23 @@ const CoinsTable = () => {
 
   // Use useEffect to fetch the data from the API when the component mounts
   useEffect(() => {
-    fetchCoins();
-  }, [currency]); // Fetch the data again when the currency changes via the CryptoState
+    const fetchCoins = async () => {  // calling the fetchCoins function inside the useEffect hook
+        setLoading(true);  // Set loading to true so that we can display a loading message while the data is being fetched
+
+        try {   // use try catch to fetch the data from the API, and make sure to await the data (using async above)
+            const { data } = await axios.get(CoinList(currency));
+            setCoins(data);  // Set the data that we received from the API to the coins state
+        } catch (error) {  // catch the error if there is one
+            console.error("Error fetching coins:", error);
+            // Optionally set some state to indicate the error to the user
+        } finally {   // once the data is fetched, set loading to false
+            setLoading(false);
+        }
+    };
+  
+    fetchCoins();  // call the fetchCoins function
+}, [currency]);  // and pass the currency as a dependency
+
 
   // import the dark theme, same as in Header.js
   const darkTheme = createTheme({
@@ -139,6 +154,7 @@ const CoinsTable = () => {
                       onClick={() => navigate(`/coins/${row.id}`)} // when the user clicks on a row, navigate to the coin details page by using the useHistory hook and the coin id
                       key={row.name} // key is required when mapping through an array
                     >
+                      {/* This is the tablecell for the coin name amd the image */}
                       <TableCell
                         component="th"
                         scope="row" // th for table header and the purpose is row
@@ -149,15 +165,28 @@ const CoinsTable = () => {
                         }}
                       >
                         {row.name} {/* display the name of the coin */}
+                        <img
+                          src={row.image}
+                          height="50"
+                          alt={row.name}
+                          style={{ marginBottom: 10 }}
+                        />{" "}
+                        {/* display the image of the coin */}
                       </TableCell>
-                      <TableCell align="right">{row.current_price}</TableCell>  {/* display the current price of the coin */}
+                      {/* This is the tablecell for the current price of the coin */}
+                      <TableCell align="right">{row.current_price}</TableCell>{" "}
+                      {/* display the current price of the coin */}
+                      {/* This is the tablecell for the 24h change of the coin */}
                       <TableCell
                         align="right"
-                        style={{ color: profit ? "green" : "red" }}  // if the price change is greater than 0, it is a profit in green, otherwise it is a loss in red
+                        style={{ color: profit ? "green" : "red" }} // if the price change is greater than 0, it is a profit in green, otherwise it is a loss in red
                       >
-                        {row.price_change_percentage_24h.toFixed(2)}%  {/* display the % change in the last 24 hours, displaying 2 decimals */}
+                        {row.price_change_percentage_24h.toFixed(2)}%{" "}
+                        {/* display the % change in the last 24 hours, displaying 2 decimals */}
                       </TableCell>
-                      <TableCell align="right">{row.market_cap}</TableCell>  {/* display the market cap of the coin */}
+                      {/* This is the tablecell for the market cap of the coin */}
+                      <TableCell align="right">{row.market_cap}</TableCell>{" "}
+                      {/* display the market cap of the coin */}
                     </StyledRow>
                   );
                 })}

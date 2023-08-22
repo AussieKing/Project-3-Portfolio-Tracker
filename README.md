@@ -58,11 +58,10 @@ Homepage bulding. divided in 2 parts :
         b. carousel []
         c. API [x]
         d. carousel [x]
-
-
-    2) COINS PORTION
+    2) COINS PORTION:
         a. Search bar [x]
-        b. Coin Table []  , using Basic Table inMaterial Ui
+        b. Coin Table using Basic Table inMaterial Ui [x]
+
 
 
 ## STEP 12 :
