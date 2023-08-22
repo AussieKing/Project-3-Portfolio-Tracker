@@ -61,6 +61,9 @@ Homepage bulding. divided in 2 parts :
 
 
     2) COINS PORTION
+        a. Search bar [x]
+        b. Coin Table []  , using Basic Table inMaterial Ui
+
 
 ## STEP 12 :
 Carousel.
