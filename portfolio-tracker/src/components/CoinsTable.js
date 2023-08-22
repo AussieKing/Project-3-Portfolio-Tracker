@@ -7,6 +7,7 @@ import {
   CircularProgress,
   Container,
   createTheme,
+  Pagination,
   styled,
   Table,
   TableBody,
@@ -21,10 +22,12 @@ import { ThemeProvider } from "@emotion/react";
 import { numberWithCommas } from "./Banner/Carousel";
 
 const CoinsTable = () => {
-  // Create states for the coins, loading, search and navigation
+  // Create states for the coins, loading, search, navigation and page
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1); // set the page to 1
+
   const navigate = useNavigate(); // need the navigate prop to navigate from one page to another
   const { currency } = CryptoState(); // Get the currency from the CryptoState hook
 
@@ -120,61 +123,83 @@ const CoinsTable = () => {
               </TableHead>
 
               <TableBody>
-                {handleSearch().map((row) => {
-                  const profit = row.price_change_percentage_24h > 0;
+                {handleSearch()
+                  .slice((page - 1) * 20, (page - 1) * 20 + 20) // slice the coins to display 20 coins per page
+                  .map((row) => {
+                    // map through the coins to display the data in the table
+                    const profit = row.price_change_percentage_24h > 0;
 
-                  return (
-                    <StyledRow
-                      onClick={() => navigate(`/coins/${row.id}`)}
-                      key={row.name}
-                    >
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        sx={{
-                          display: "flex",
-                          gap: "15px",
-                        }}
+                    return (
+                      <StyledRow
+                        onClick={() => navigate(`/coins/${row.id}`)}
+                        key={row.name}
                       >
-                        <img
-                          src={row?.image}
-                          alt={row.name}
-                          height="50"
-                          sx={{ marginBottom: "10px" }}
-                        />
-                        <div sx={{ display: "flex", flexDirection: "column" }}>
-                          <span
-                            style={{
-                              textTransform: "uppercase",
-                              fontSize: "22px",
-                            }}
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{
+                            display: "flex",
+                            gap: "15px",
+                          }}
+                        >
+                          <img
+                            src={row?.image}
+                            alt={row.name}
+                            height="50"
+                            sx={{ marginBottom: "10px" }}
+                          />
+                          <div
+                            sx={{ display: "flex", flexDirection: "column" }}
                           >
-                            {row.symbol}
-                          </span>
+                            <span
+                              style={{
+                                textTransform: "uppercase",
+                                fontSize: "22px",
+                              }}
+                            >
+                              {row.symbol}
+                            </span>
                             <br />
-                          <span sx={{ color: "darkgrey" }}>{row.name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell align="right" style={{ fontWeight: 500 }}>
-                        {Symbol}{" "}
-                        {numberWithCommas(row.current_price.toFixed(2))}
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        style={{ color: profit ? "green" : "red" }}
-                      >
-                        {row.price_change_percentage_24h.toFixed(2)}%
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.market_cap.toString().slice(0, -6)}M
-                      </TableCell>
-                    </StyledRow>
-                  );
-                })}
+                            <span sx={{ color: "darkgrey" }}>{row.name}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell align="right" style={{ fontWeight: 500 }}>
+                          {Symbol}{" "}
+                          {numberWithCommas(row.current_price.toFixed(2))}
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          style={{ color: profit ? "green" : "red" }}
+                        >
+                          {row.price_change_percentage_24h.toFixed(2)}%
+                        </TableCell>
+                        <TableCell align="right">
+                          {row.market_cap.toString().slice(0, -6)}M
+                        </TableCell>
+                      </StyledRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           )}
         </TableContainer>
+        <Pagination
+          count={Math.ceil(handleSearch().length / 10)}  // count the number of pages based on the number of coins and the number of coins per page, and use Math.ceil to round up, so that we don't have a decimal number of pages
+          sx={{
+            padding: 20,
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            ul: {  
+              listStyle: "none",
+              padding: 0,
+            },
+          }}
+          onChange={(_, value) => {  // onChange function to change the page
+            setPage(value);  // set the page to the value
+            window.scroll(0, 450);  // scroll to the top of the page when the page changes (450px)
+          }}
+        />
       </Container>
     </ThemeProvider>
   );

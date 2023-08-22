@@ -1,7 +1,9 @@
 # Project-3-Portfolio-Tracker
 
 ## TECHNOLOGIES USED:
-- React Router DOM
+- React JS  (https://reactjs.org/)
+    - React Router DOM
+- Chart JS (https://www.chartjs.org/)
 - Material UI as React Library (https://mui.com/)
 - GoogleFonts (https://fonts.google.com/specimen/Inconsolata) - 300, 400, 800
 - Unsplash (Banner image by Javier Miranda https://unsplash.com/photos/MrWOCGKFVDg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink )
@@ -63,32 +65,65 @@ Homepage bulding. divided in 2 parts :
         b. Coin Table using Basic Table inMaterial Ui [x]
         c. API [x]
         d. Coin Table [x]
-        e. Pagination []
-
-
+        e. Pagination , need to slice the returned results and create the state, and import it [x]
 
 ## STEP 12 :
 Carousel.
 via `npm i react-alice-carousel`
 import `import "react-alice-carousel/lib/alice-carousel.css";` in index.js;
 
+## STEP 13 :
+Single Coin page.
+    a. styling []
+    b. API []
+    c. Coin Page []
+    d. Chart []
+    e. Coin Data (rank, price, market cap) []
+    f. Coin Description []
+    g. Coin Links []
+    h. Add to Watchlist []
 
 
+## STEP 14 :
+Login Page.
+    a. styling []
+    b. Login Page []
+    c. Login Form []
+    d. Login Mutation []
+    e. Auth Context []
+    f. Auth Provider []
+    g. Login []
+    h. Logout []
+    i. Protected Route []
 
+## STEP 15 :
+Database Setup.
+    a. MongoDB Atlas []
+    b. Mongoose []
+    c. Models []
+    d. Connect to DB []
+    e. Create User []
+    f. Login User []
+    g. Auth Middleware []
+    h. Get User []
+    i. Logout User []
 
-
-
-
-
-
-
-
-
-
-
+## STEP 16 :
+Watchlist Page.
+    a. styling []
+    b. Watchlist Page []
+    c. Watchlist Table []
+    d. Watchlist Query []
+    e. Watchlist Mutation []
+    f. Add to Watchlist []
+    g. Remove from Watchlist []
+    h. Insert comment []
+    i. Delete comment []
+    j. Update comment []
+    k. Logout []
 
 ## APP MUST :
-User React for front end - []
+User React for front end - [x]
 Use GraphQL with a Node.js and Express.js server - []
 Use MongoDB and Mongoose ODm for Database - []
 Use Queries and Mutations for CRUD - []
@@ -98,6 +133,10 @@ Include Authentication (JWT) - []
 ## ADD-ON :
 Add STRIPE to take donations - []
 
-
 ## ISUES FACED:
 - commentary : I was trying to leave as many comments as possible, but turns out that that can lead to a tonne of warnings. So I had to remove some of them. I'll try to add as many as possible.
+
+## LEARNINGS:
+- Shortcuts : the RAFCE shortcut via the ES7 extension in VSCode creates the boilerplate for a functional component.
+- Material UI : I learnt how to use Material UI, and how to use the basic table, and the select drop down component.
+- CTRL + space : to see the options available for the component (and import automatically)
