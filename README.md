@@ -10,6 +10,8 @@
 - Coingecko API : (https://www.coingecko.com/en/api)
 - Axios : to handle API requests (https://www.npmjs.com/package/axios)
 - React Alice Carousel: npm i react-alice-carousel (https://www.npmjs.com/package/react-alice-carousel)
+- html-react-oarser : `npm i html-react-parser` (https://www.npmjs.com/package/html-react-parser)
+- react-chartjs-2 : `npm i react-chartjs-2` (https://www.npmjs.com/package/react-chartjs-2)
 
 ## DEPENDENCIES:
 - React Router DOM
@@ -74,12 +76,12 @@ import `import "react-alice-carousel/lib/alice-carousel.css";` in index.js;
 
 ## STEP 13 :
 Single Coin page.
-    a. styling []
-    b. API []
-    c. Coin Page []
+    a. styling [x]
+    b. API [x]
+    c. Coin Page [x]
     d. Chart []
-    e. Coin Data (rank, price, market cap) []
-    f. Coin Description []
+    e. Coin Data (rank, price, market cap) [x]
+    f. Coin Description [x]
     g. Coin Links []
     h. Add to Watchlist []
 
