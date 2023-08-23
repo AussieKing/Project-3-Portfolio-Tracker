@@ -8,6 +8,7 @@ export const CoinList = (currency) =>
 export const SingleCoin = (id) =>
   `https://api.coingecko.com/api/v3/coins/${id}`;
 
+  // This API takes the id of the coin as a parameter and returns the historical price action of that coin in the last 365 days.
 export const HistoricalChart = (id, days = 365, currency) =>
   `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`;
 

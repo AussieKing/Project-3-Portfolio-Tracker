@@ -10,7 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 // function to add price to the carousel coins, via a RegEx (thanks google!)
 export const numberWithCommas = (number) => {  // pass on the number as a parameter
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");  // and return the number with a comma via the RegEx
-};
+}; // export it so we can use it in other components
 
 // Create a styled version of the Link component
 const StyledLink = styled(RouterLink)(({ theme }) => ({

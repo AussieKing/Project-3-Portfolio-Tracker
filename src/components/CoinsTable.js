@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { CryptoState } from "../Pages/CryptoContext";
 import { CoinList } from "../config/api";
@@ -17,44 +17,33 @@ import {
   TableRow,
   TextField,
   Typography,
+  ThemeProvider,
 } from "@mui/material";
-import { ThemeProvider } from "@emotion/react";
 import { numberWithCommas } from "./Banner/Carousel";
 
 const CoinsTable = () => {
-  // Create states for the coins, loading, search, navigation and page
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1); // set the page to 1
+  const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+  const { currency } = CryptoState();
 
-  const navigate = useNavigate(); // need the navigate prop to navigate from one page to another
-  const { currency } = CryptoState(); // Get the currency from the CryptoState hook
-
-  // Create a function to fetch the data from the API:
-  // We receive data/currency from the API, and we destructure { } the data to get the coins
-  // Use useEffect to fetch the data from the API when the component mounts
   useEffect(() => {
     const fetchCoins = async () => {
-      // calling the fetchCoins function inside the useEffect hook
-
-      setLoading(true); // Set loading to true so that we can display a loading message while the data is being fetched
-      // use try catch to fetch the data from the API, and make sure to await the data (using async above)
+      setLoading(true);
       try {
         const { data } = await axios.get(CoinList(currency));
-        setCoins(data); // Set the data that we received from the API to the coins state
+        setCoins(data);
       } catch (error) {
         console.error("Error fetching coins:", error);
       } finally {
-        // once the data is fetched, set loading to false
         setLoading(false);
       }
     };
-
     fetchCoins();
   }, [currency]);
 
-  // import the dark theme, same as in Header.js
   const darkTheme = createTheme({
     palette: {
       primary: {
@@ -64,17 +53,14 @@ const CoinsTable = () => {
     },
   });
 
-  // need to create a handle search function to filter the coins based on the search bar;
-  // searching for a coin by name on the search bar and returning the coins that match the search with the symbol and name
-  // filter the coins by name based on the search bar, and use the toUpperCase() and toLowerCase() methods to make the search case insensitive
-  const handleSearch = () => {
+  const filteredCoins = useMemo(() => {
     return coins.filter(
       (coin) =>
         coin.name.toLowerCase().includes(search.toLowerCase()) ||
         coin.symbol.toLowerCase().includes(search.toLowerCase())
     );
-  };
-  // create a styled row to display the coins in the table
+  }, [coins, search]);
+
   const StyledRow = styled(TableRow)(({ theme }) => ({
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
@@ -85,10 +71,7 @@ const CoinsTable = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <Container style={{ textAlign: "center" }}>
-        <Typography
-          variant="h4"
-          style={{ margin: 18, fontFamily: "Monserrat" }}
-        >
+        <Typography variant="h4" style={{ margin: 18, fontFamily: "Montserrat" }}>
           Top 100 Cryptocurrencies by Market Cap
         </Typography>
 
@@ -101,7 +84,7 @@ const CoinsTable = () => {
 
         <TableContainer>
           {loading ? (
-            <CircularProgress style={{ display: "flex" }} />
+            <CircularProgress style={{ display: "block", margin: "0 auto" }} />
           ) : (
             <Table aria-label="simple table">
               <TableHead style={{ backgroundColor: "#EEBC1D" }}>
@@ -123,10 +106,9 @@ const CoinsTable = () => {
               </TableHead>
 
               <TableBody>
-                {handleSearch()
-                  .slice((page - 1) * 20, (page - 1) * 20 + 20) // slice the coins to display 20 coins per page
+                {filteredCoins
+                  .slice((page - 1) * 20, (page - 1) * 20 + 20)
                   .map((row) => {
-                    // map through the coins to display the data in the table
                     const profit = row.price_change_percentage_24h > 0;
 
                     return (
@@ -184,20 +166,20 @@ const CoinsTable = () => {
           )}
         </TableContainer>
         <Pagination
-          count={Math.ceil(handleSearch().length / 10)}  // count the number of pages based on the number of coins and the number of coins per page, and use Math.ceil to round up, so that we don't have a decimal number of pages
+          count={Math.ceil(filteredCoins.length / 10)}
           sx={{
             padding: 20,
             width: "100%",
             display: "flex",
             justifyContent: "center",
-            ul: {  
+            ul: {
               listStyle: "none",
               padding: 0,
             },
           }}
-          onChange={(_, value) => {  // onChange function to change the page
-            setPage(value);  // set the page to the value
-            window.scroll(0, 450);  // scroll to the top of the page when the page changes (450px)
+          onChange={(_, value) => {
+            setPage(value);
+            window.scroll(0, 450);
           }}
         />
       </Container>

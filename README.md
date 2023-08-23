@@ -82,7 +82,7 @@ Single Coin page.
     d. Chart []
     e. Coin Data (rank, price, market cap) [x]
     f. Coin Description [x]
-    g. Coin Links []
+    g. Coin Links [x]
     h. Add to Watchlist []
 
 
