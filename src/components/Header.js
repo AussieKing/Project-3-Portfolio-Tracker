@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CryptoState } from '../Pages/CryptoContext';
+import AuthModal from './Authentication/AuthModal';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -61,6 +62,8 @@ const Header = () => {
                             <MenuItem value='GBP'>GBP</MenuItem>
                             <MenuItem value='AUD'>AUD</MenuItem>
                         </Select>
+
+                        <AuthModal />
                     </Toolbar>
                 </Container>
             </AppBar>
