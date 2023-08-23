@@ -140,3 +140,4 @@ Add STRIPE to take donations - []
 - Shortcuts : the RAFCE shortcut via the ES7 extension in VSCode creates the boilerplate for a functional component.
 - Material UI : I learnt how to use Material UI, and how to use the basic table, and the select drop down component.
 - CTRL + space : to see the options available for the component (and import automatically)
+- use `git config --global alias.tree '! git ls-tree --full-name --name-only -t -r HEAD | sed -e "s/[^-][^\/]*\//   |/g" -e "s/|\([^ ]\)/|-- \1/"'` to see the tree structure of the project, and call it by `git tree`
