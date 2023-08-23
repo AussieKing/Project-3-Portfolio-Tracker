@@ -1,53 +1,158 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
-import { SingleCoin } from '../config/api';
-import { CryptoState } from './CryptoContext';
-import { CircularProgress } from "@mui/material"; // For loading state
+import { LinearProgress, Typography } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { styled } from '@mui/system';
+import parse from 'html-react-parser';  // gets rid of the html tags in the description of the data returned from the API
+import CoinInfo from "../components/CoinInfo";
+import { SingleCoin } from "../config/api";
+import { numberWithCommas } from '../components/Banner/Carousel';
+import { CryptoState } from "./CryptoContext";
 
+const CoinContainer = styled('div')(({ theme }) => ({
+  display: "flex",
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+}));
 
-// use useParam to get the id of the coin from the URL
+const CoinSidebar = styled('div')(({ theme }) => ({
+  width: "30%",
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+  },
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  marginTop: 25,
+  borderRight: "2px solid grey",
+}));
+
+const CoinHeading = styled(Typography)(({ theme }) => ({
+  fontWeight: "bold",
+  marginBottom: 20,
+  fontFamily: "Montserrat",
+}));
+
+const CoinDescription = styled(Typography)(({ theme }) => ({
+  width: "100%",
+  fontFamily: "Montserrat",
+  padding: 25,
+  paddingBottom: 15,
+  paddingTop: 0,
+  textAlign: "justify",
+}));
+
+const CoinMarketData = styled('div')(({ theme }) => ({
+  alignSelf: "start",
+  padding: 25,
+  paddingTop: 10,
+  width: "100%",  
+  [theme.breakpoints.down("md")]: {   // for medium screens and below
+    display: "flex",  // display the data in a row and flex
+    justifyContent: "space-around",
+  },
+  [theme.breakpoints.down("sm")]: {  // for small screens and below
+    flexDirection: "column",  // display the data in a column
+    alignItems: "center",
+  },
+  [theme.breakpoints.down("xs")]: {  // for extra small screens and below
+    alignItems: "start",  // align the data to the start
+  },
+}));
+
 const CoinPage = () => {
-
   const { id } = useParams();
-  const [coinData, setCoinData] = useState(null); //create the state to store what we get from the API
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-
-
-  // bring in the currency and symbol from the CryptoState hook
+  const [coin, setCoin] = useState();
   const { currency, symbol } = CryptoState();
 
-  // create a function to fetch the data from the API
-  const fetchCoinData = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(SingleCoin(id));
-      setCoinData(data);
-    } catch (err) {
-      setError(err.message || "An error occurred.");
-    } finally {
-      setLoading(false);
-    }
+  const fetchCoin = async () => {
+    const { data } = await axios.get(SingleCoin(id));
+    setCoin(data);
   };
 
-  console.log(coinData);
-
-  // use useEffect to fetch the data from the API when the component mounts
   useEffect(() => {
-    fetchCoinData();
-  }, [id]);
+    fetchCoin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  if (loading) return <CircularProgress />;  // Show a loader when fetching
-  if (error) return <div>Error: {error}</div>; // Show error message
-
-
+  if (!coin) return <LinearProgress style={{ backgroundColor: "gold" }} />;
 
   return (
-    <div>
-      CoinPage for {coinData.name}
-    </div>
-  )
-}
+    <CoinContainer>
+      <CoinSidebar>
+        <img
+          src={coin?.image.large}
+          alt={coin?.name}
+          height="200"
+          style={{ marginBottom: 20 }}
+        />
+        <CoinHeading variant="h3">
+          {coin?.name}
+        </CoinHeading>
+        <CoinDescription variant="subtitle1">
+          {parse(coin?.description.en.split(". ")[0])}  {/* parse the description (in english) of the coin to get rid of the html tags */}
+        </CoinDescription>
+        <CoinMarketData>
+          <span style={{ display: "flex" }}>
+            <CoinHeading variant="h5">
+              Rank:
+            </CoinHeading>
+            &nbsp; &nbsp;
+            <Typography
+              variant="h5"
+              style={{
+                fontFamily: "Montserrat",
+              }}
+            >
+              {numberWithCommas(coin?.market_cap_rank)}
+            </Typography>
+          </span>
+
+          <span style={{ display: "flex" }}>
+            <CoinHeading variant="h5">
+              Current Price:
+            </CoinHeading>
+            &nbsp; &nbsp;
+            <Typography
+              variant="h5"
+              style={{
+                fontFamily: "Montserrat",
+              }}
+            >
+              {symbol}{" "}
+              {numberWithCommas(  
+                coin?.market_data.current_price[currency.toLowerCase()]
+              )}
+            </Typography>
+          </span>
+          <span style={{ display: "flex" }}>
+            <CoinHeading variant="h5">
+              Market Cap:
+            </CoinHeading>
+            &nbsp; &nbsp;
+            <Typography
+              variant="h5"
+              style={{
+                fontFamily: "Montserrat",
+              }}
+            >
+              {symbol}{" "}
+              {numberWithCommas(
+                coin?.market_data.market_cap[currency.toLowerCase()]
+                  .toString()
+                  .slice(0, -6)
+              )}
+              M
+            </Typography>
+          </span>
+        </CoinMarketData>
+      </CoinSidebar>
+      <CoinInfo coin={coin} />
+    </CoinContainer>
+  );
+};
 
 export default CoinPage;
+
