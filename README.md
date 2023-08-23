@@ -88,6 +88,7 @@ Single Coin page.
 
 ## STEP 14 :
 Login Page.
+    0. Setup Firebase (and create .env file for API key) [x]
     a. styling []
     b. Login Page []
     c. Login Form []
