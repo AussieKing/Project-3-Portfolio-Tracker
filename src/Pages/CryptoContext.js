@@ -6,6 +6,11 @@ const CryptoContext = ({ children }) => {
   // create the state and the functions to update the state for the currency and the symbols
   const [currency, setCurrency] = useState('USD');
   const [symbol, setSymbol] = useState("$");
+  //TODO : new states for the coins and the loading
+  const [coins, setCoins] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+
 
 useEffect(() => {  // useEffect to run whatever is rendered inside the component
 
