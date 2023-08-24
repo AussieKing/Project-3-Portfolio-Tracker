@@ -8,7 +8,7 @@ import CoinInfo from "../components/CoinInfo";
 import { SingleCoin } from "../config/api";
 import { numberWithCommas } from "../components/Banner/Carousel";
 import { CryptoState } from "./CryptoContext";
-
+ 
 const CoinContainer = styled("div")(({ theme }) => ({
   display: "flex",
   [theme.breakpoints.down("md")]: {
@@ -64,6 +64,11 @@ const CoinMarketData = styled("div")(({ theme }) => ({
     alignItems: "start", // align the data to the start
   },
 }));
+
+//TODO : This is the function for the database : currently setup in Firebase. Need to refactor it to work with MongoDB
+// const addToWatchlist = () => {
+// }
+//TODO above - need to setup the database to work with MongoDB
 
 const CoinPage = () => {
   const { id } = useParams();
