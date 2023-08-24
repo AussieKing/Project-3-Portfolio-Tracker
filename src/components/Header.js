@@ -10,6 +10,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CryptoState } from '../Pages/CryptoContext';
 import AuthModal from './Authentication/AuthModal';
+import UserSidebar from './Authentication/UserSidebar';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -63,7 +64,7 @@ const Header = () => {
                             <MenuItem value='AUD'>AUD</MenuItem>
                         </Select>
 
-                        {user?"Logout": <AuthModal />}
+                        {user? <UserSidebar />: <AuthModal />}
                     </Toolbar>
                 </Container>
             </AppBar>
