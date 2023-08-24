@@ -12,6 +12,7 @@
 - React Alice Carousel: npm i react-alice-carousel (https://www.npmjs.com/package/react-alice-carousel)
 - html-react-oarser : `npm i html-react-parser` (https://www.npmjs.com/package/html-react-parser)
 - react-chartjs-2 : `npm i react-chartjs-2` (https://www.npmjs.com/package/react-chartjs-2)
+- react google button : `npm i react-google-button` (https://www.npmjs.com/package/react-google-button)
 
 ## DEPENDENCIES:
 - React Router DOM
@@ -92,11 +93,11 @@ Login Page.
     a. styling [x]
     b. Login Page [x]
     c. Login Form [x]
-    d. Login Mutation []
-    e. Auth Context []
-    f. Auth Provider []
-    g. Login []
-    h. Logout []
+    d. Login Mutation [x]
+    e. Auth Context [x]
+    f. Auth Provider [x]
+    g. Login [x]
+    h. Logout [x]
     i. Protected Route []
 
 ## STEP 15 :
@@ -113,8 +114,8 @@ Database Setup.
 
 ## STEP 16 :
 User Sidebar/Watchlist Page.
-    a. styling (using Drawer from MUI) []
-    b. Watchlist Page []
+    a. styling (using Drawer from MUI) [x]
+    b. Watchlist Page [x]
     c. Watchlist Table []
     d. Watchlist Query []
     e. Watchlist Mutation []
