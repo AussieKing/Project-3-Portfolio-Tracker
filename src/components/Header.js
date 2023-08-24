@@ -13,7 +13,7 @@ import AuthModal from './Authentication/AuthModal';
 
 const Header = () => {
     const navigate = useNavigate();
-    const { currency, setCurrency } = CryptoState();  // Destructuring the custom hook
+    const { currency, setCurrency, user } = CryptoState();  // Destructuring the custom hook. See the <AuthModal below to see what we do with the user state (if it exists, we display the logout button)
     console.log(currency);  
 
     const darkTheme = createTheme({
@@ -63,7 +63,7 @@ const Header = () => {
                             <MenuItem value='AUD'>AUD</MenuItem>
                         </Select>
 
-                        <AuthModal />
+                        {user?"Logout": <AuthModal />}
                     </Toolbar>
                 </Container>
             </AppBar>
