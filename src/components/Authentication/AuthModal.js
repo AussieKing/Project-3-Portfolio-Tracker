@@ -40,6 +40,7 @@ export default function AuthModal() {
     setValue(newValue);
   };
 
+  // Google Authentication Function from Firebase
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
