@@ -7,6 +7,7 @@ import Homepage from "./Pages/HomePage";
 import Coinpage from "./Pages/CoinPage";
 import { StyledEngineProvider } from "@mui/material/styles"; 
 import { styled } from "@mui/material/styles";
+import Alert from "./components/Alert";
 
 const AppContainer = styled('div')({
   backgroundColor: "#14161a",
@@ -25,6 +26,7 @@ function App() {
             <Route path="/coins/:id" element={<Coinpage />} />
           </Routes>
         </AppContainer>
+        <Alert />
       </Router>
     </StyledEngineProvider>
   );
