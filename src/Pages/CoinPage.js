@@ -66,8 +66,32 @@ const CoinMarketData = styled("div")(({ theme }) => ({
 }));
 
 //TODO : This is the function for the database : currently setup in Firebase. Need to refactor it to work with MongoDB
-// const addToWatchlist = () => {
-// }
+// const addToWatchlist = async (coin) => {
+//   try {
+//     let watchlist = await Watchlist.findOne({ userId: user.uid }); // Assuming user has a unique uid
+    
+//     if (!watchlist) {
+//       watchlist = new Watchlist({
+//         userId: user.uid,
+//         coins: [],
+//       });
+//     }
+
+//     const coinData = {
+//       coinId: coin.id,
+//       name: coin.name,
+//       image: coin.image.large,
+//       currentPrice: coin.market_data.current_price[currency.toLowerCase()],
+//     };
+
+//     watchlist.coins.push(coinData);
+//     await watchlist.save();
+    
+//     alert("Coin added to watchlist!"); // Provide some feedback to the user
+//   } catch (error) {
+//     console.error("Failed to add to watchlist", error);
+//   }
+// };
 //TODO above - need to setup the database to work with MongoDB
 
 const CoinPage = () => {
@@ -159,9 +183,10 @@ const CoinPage = () => {
                   backgroundColor: "goldenrod",
                   color: "black",
                   ":hover": {
-                    backgroundColor: "gold",
+                  backgroundColor: "gold",
                   },
                 }}
+                // onClick={() => addToWatchlist(coin)} //TODO : This is the function for the database : currently setup in Firebase. Need to refactor it to work with MongoDB
               >
                 Add to Watchlist
               </Button>
