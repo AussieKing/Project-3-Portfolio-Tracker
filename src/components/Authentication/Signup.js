@@ -9,9 +9,12 @@ const Signup = ({handleClose}) => {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
-  // handle submit function
+  // handle submit function : check for password match (alert via MUI snackbar)
   const handleSubmit = () => {
-    console.log('submitting form');
+    if (password !== passwordConfirmation) {
+      alert('Passwords do not match');
+      return;
+    }
   }
 
 
