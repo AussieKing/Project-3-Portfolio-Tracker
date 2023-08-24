@@ -29,7 +29,7 @@ const CoinsTable = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
-  const { currency } = CryptoState();
+  const { Symbol, currency } = CryptoState();
 
   useEffect(() => {
     const fetchCoins = async () => {
@@ -121,7 +121,7 @@ const CoinsTable = () => {
                         <TableCell
                           component="th"
                           scope="row"
-                          sx={{
+                          style={{ 
                             display: "flex",
                             gap: "15px",
                           }}
@@ -130,10 +130,10 @@ const CoinsTable = () => {
                             src={row?.image}
                             alt={row.name}
                             height="50"
-                            sx={{ marginBottom: "10px" }}
+                            style={{ marginBottom: "10px" }}
                           />
                           <div
-                            sx={{ display: "flex", flexDirection: "column" }}
+                            style={{ display: "flex", flexDirection: "column" }}
                           >
                             <span
                               style={{
@@ -144,7 +144,7 @@ const CoinsTable = () => {
                               {row.symbol}
                             </span>
                             <br />
-                            <span sx={{ color: "darkgrey" }}>{row.name}</span>
+                            <span style={{ color: "darkgrey" }}>{row.name}</span>
                           </div>
                         </TableCell>
                         <TableCell align="right" style={{ fontWeight: 500 }}>
