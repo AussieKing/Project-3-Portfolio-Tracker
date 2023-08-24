@@ -185,4 +185,6 @@ T- here are no major disparities in the number of GitHub contributions between g
 
 
 # TO-DO's:
+- Charts not working 
 - Firebase API call not working in Heroku
+
