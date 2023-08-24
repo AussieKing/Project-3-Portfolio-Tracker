@@ -10,7 +10,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 const Alert = () => {
-  const [alert, setAlert] = CryptoState(); // import the alert state from the CryptoContext
+  const { alert, setAlert } = CryptoState(); // import the alert state from the CryptoContext
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {

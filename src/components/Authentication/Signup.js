@@ -1,6 +1,11 @@
+//! SIGNUP COMPONENT
+
 import React from 'react'
 import { useState } from 'react';
 import { Box, TextField, Button } from '@mui/material';
+import { CryptoState } from '../../Pages/CryptoContext';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../../firebase';
 
 const Signup = ({handleClose}) => {
 
@@ -9,12 +14,44 @@ const Signup = ({handleClose}) => {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
+  const { alert, setAlert } = CryptoState();  // import the setAlert function from the CryptoContext
+
   // handle submit function : check for password match (alert via MUI snackbar)
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (password !== passwordConfirmation) {
-      alert('Passwords do not match');
+      setAlert({
+        open: true,
+        message: "Passwords don't match",
+        type: 'error'
+      });
       return;
     }
+    // Try catch crate new user via the firebase auth
+    try {
+      const res = await createUserWithEmailAndPassword(
+        auth, 
+        email, 
+        password
+        );
+
+        setAlert({
+          open: true,
+          message: `Sign Up successful! Welcome ${res.user.email}`,
+          type: 'success'
+        });
+
+        // after the login, close the modal
+        handleClose();
+
+      } catch (error) {
+        setAlert({
+          open: true,
+          message: error.message,
+          type: 'error'
+        });
+      }
+
+    
   }
 
 
@@ -33,6 +70,7 @@ const Signup = ({handleClose}) => {
         label="Enter Password"
         variant="outlined"
         value={password}
+        type='password'
         onChange={(e) => setPassword(e.target.value)}
         fullWidth
       />
@@ -41,6 +79,7 @@ const Signup = ({handleClose}) => {
         label="Confirm Password"
         variant="outlined"
         value={passwordConfirmation}
+        type='password'
         onChange={(e) => setPasswordConfirmation(e.target.value)}
         fullWidth
       />
