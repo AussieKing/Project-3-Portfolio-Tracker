@@ -50,6 +50,31 @@ const LogoutButton = styled(Button)(({ theme }) => ({
   backgroundColor: 'goldenrod',
 }));
 
+const Watchlist = styled('div')(({ theme }) => ({
+  fontSize: 15,
+  textShadow: '0 0 5px black',
+  flex: 1,
+  height: "200px",
+  width: "100%",
+  backgroundColor: "grey",
+  borderRadius: 10,
+  padding: 15,
+  paddingTop: 10,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: 12,
+  overflowY: "scroll",
+  scrollbarWidth: "thin", // For Firefox
+  "&::-webkit-scrollbar": {
+    width: "6px", // For Chrome, Safari, and Opera
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "rgba(155, 155, 155, 0.7)", // For Chrome, Safari, and Opera
+  },
+}));
+
+// using the firebase auth to sign out the user, taking the user to the login page
 const handleLogout = () => {
   auth.signOut().then(() => {
     console.log('User signed out');
@@ -97,6 +122,7 @@ export default function UserSidebar() {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
+            
             <StyledContainer>
               <StyledAvatar 
                 src={user?.photoURL}
@@ -104,7 +130,15 @@ export default function UserSidebar() {
               />
               <UserName variant="h6">{user?.displayName}</UserName>
               <UserEmail variant="body2">{user?.email}</UserEmail>
+
+              {/* working on having the favorites list here */}
+            {user.displayName || user.email}
+            <Watchlist>
+              Watchlist
+            </Watchlist>
+
             </StyledContainer>
+
             <LogoutButton 
               variant="contained"
               onClick={handleLogout}
