@@ -5,9 +5,10 @@
 
 import * as React from "react";
 import Drawer from "@mui/material/Drawer";
-import { Avatar, Typography } from "@mui/material";
+import { Avatar, Typography, Button } from "@mui/material"; // Updated Button import
 import { CryptoState } from "../../Pages/CryptoContext";
 import { styled } from '@mui/system';
+import { auth } from '../../firebase';
 
 const StyledContainer = styled('div')(({ theme }) => ({
   width: 350,
@@ -41,6 +42,21 @@ const UserEmail = styled(Typography)(({ theme }) => ({
   wordWrap: "break-word",
   fontSize: 20,
 }));
+
+const LogoutButton = styled(Button)(({ theme }) => ({
+  position: 'absolute',
+  bottom: theme.spacing(2),
+  alignSelf: 'center',
+  backgroundColor: 'goldenrod',
+}));
+
+const handleLogout = () => {
+  auth.signOut().then(() => {
+    console.log('User signed out');
+  }).catch((error) => {
+    console.error('Error signing out:', error);
+  });
+};
 
 export default function UserSidebar() {
   
@@ -89,6 +105,12 @@ export default function UserSidebar() {
               <UserName variant="h6">{user?.displayName}</UserName>
               <UserEmail variant="body2">{user?.email}</UserEmail>
             </StyledContainer>
+            <LogoutButton 
+              variant="contained"
+              onClick={handleLogout}
+            >
+              Logout
+            </LogoutButton>
           </Drawer>
         </React.Fragment>
       ))}
