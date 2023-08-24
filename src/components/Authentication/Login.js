@@ -1,6 +1,9 @@
 import React from 'react'
 import { Box, TextField, Button } from '@mui/material';
 import { useState } from 'react';
+import { CryptoState } from '../../Pages/CryptoContext';
+import { signInWithEmailAndPassword } from '@firebase/auth';
+import { auth } from '../../firebase';
 
 const Login = ({handleClose}) => {
 
@@ -8,9 +11,42 @@ const Login = ({handleClose}) => {
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
 
+// import the setalert function from the CryptoState
+const { alert, setAlert } = CryptoState();
+
 // handle submit function
-const handleSubmit = () => {
-  console.log('submitting form');
+const handleSubmit = async() => {
+
+  if (!email || !password) {
+    setAlert({
+      open: true,
+      message: 'Please fill in all fields',
+      type: 'error'
+    });
+    return;
+  }
+
+  // try catch login user via firebase auth
+  try {
+    const res = await signInWithEmailAndPassword(auth, email, password);
+
+    setAlert({
+      open: true,
+      message: `Login successful! Welcome ${res.user.email}`,
+      type: 'success'
+    });
+
+    // after the login, close the modal
+    handleClose();
+  }
+  catch (error) {
+    setAlert({
+      open: true,
+      message: error.message,
+      type: 'error'
+    });
+  }
+
 }
 
 
@@ -29,6 +65,7 @@ const handleSubmit = () => {
         label="Enter Password"
         variant="outlined"
         value={password}
+        type='password'
         onChange={(e) => setPassword(e.target.value)}
         fullWidth
       />
@@ -38,7 +75,7 @@ const handleSubmit = () => {
         size='large'
         onClick={handleSubmit}
       >
-        Sign Up
+        Login
       </Button>
     </Box>
   )
