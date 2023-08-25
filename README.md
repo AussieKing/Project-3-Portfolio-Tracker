@@ -14,6 +14,12 @@
 - react-chartjs-2 : `npm i react-chartjs-2` (https://www.npmjs.com/package/react-chartjs-2)
 - react google button : `npm i react-google-button` (https://www.npmjs.com/package/react-google-button)
 - dotenv : `npm i dotenv` (https://www.npmjs.com/package/dotenv)
+- graphql : `npm i graphql` (https://www.npmjs.com/package/graphql)
+- apollo-server-express : `npm i apollo-server-express` (https://www.npmjs.com/package/apollo-server-express)
+- mongoose : `npm i mongoose` (https://www.npmjs.com/package/mongoose)
+- bcrypt : `npm i bcrypt` (https://www.npmjs.com/package/bcrypt)
+- jsonwebtoken : `npm i jsonwebtoken` (https://www.npmjs.com/package/jsonwebtoken)
+
 
 ## DEPENDENCIES:
 - React Router DOM

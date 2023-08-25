@@ -9,6 +9,8 @@ import { Avatar, Typography, Button } from "@mui/material"; // Updated Button im
 import { CryptoState } from "../../Pages/CryptoContext";
 import { styled } from '@mui/system';
 import { auth } from '../../firebase';
+import { useQuery } from '@apollo/client';
+import { GET_WATCHLIST } from '../graphql/queries';
 
 const StyledContainer = styled('div')(({ theme }) => ({
   width: 350,
@@ -84,7 +86,6 @@ const handleLogout = () => {
 };
 
 export default function UserSidebar() {
-  
   const [state, setState] = React.useState({
     right: false,
   });
@@ -101,6 +102,28 @@ export default function UserSidebar() {
   };
 
   const { user } = CryptoState();
+
+  // Using Apollo's useQuery hook
+  const { loading, error, data } = useQuery(GET_WATCHLIST, {
+    variables: { userId: user?.email },
+    skip: !user?.email, // Skip the query if there's no user email
+  });
+
+  // Watchlist content to display
+  const watchlistContent = loading ? (
+    <div>Loading...</div>
+  ) : error ? (
+    <div>Error: {error.message}</div>
+  ) : data?.getWatchlist?.coins?.length ? (
+    data.getWatchlist.coins.map((coin) => (
+      <div key={coin.coinId}>
+        <img src={coin.image} alt={coin.name} width={30} />
+        <span>{coin.name}: ${coin.currentPrice}</span>
+      </div>
+    ))
+  ) : (
+    <div>No coins in watchlist</div>
+  );
 
   return (
     <div>
@@ -134,7 +157,7 @@ export default function UserSidebar() {
               {/* working on having the favorites list here */}
             {user.displayName || user.email}
             <Watchlist>
-              Watchlist
+            {watchlistContent}
             </Watchlist>
 
             </StyledContainer>
