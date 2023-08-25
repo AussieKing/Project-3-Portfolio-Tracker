@@ -109,10 +109,10 @@ Login Page.
 
 ## STEP 15 :
 Database Setup.
-    a. MongoDB Atlas []
-    b. Mongoose []
-    c. Models []
-    d. Connect to DB []
+    a. MongoDB Atlas [x]
+    b. Mongoose [x]
+    c. Models [x]
+    d. Connect to DB [x]
     e. Create User []
     f. Login User []
     g. Auth Middleware []

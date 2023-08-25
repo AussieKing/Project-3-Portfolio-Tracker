@@ -22,17 +22,27 @@ module.exports = {
     addToWatchlist: async (_, args) => {
       const { userId, coin } = args;
       try {
+        console.log("Starting addToWatchlist resolver...");
+        
         let watchlist = await Watchlist.findOne({ userId });
-
+        
+        console.log("Fetched watchlist:", watchlist);
+   
         if (!watchlist) {
+          console.log("No existing watchlist found. Creating a new one...");
           watchlist = new Watchlist({ userId, coins: [coin] });
         } else {
+          console.log("Adding coin to existing watchlist...");
           watchlist.coins.push(coin);
         }
-
-        await watchlist.save();
-        return watchlist;
+   
+        const savedWatchlist = await watchlist.save();
+        
+        console.log("Saved watchlist:", savedWatchlist);
+   
+        return savedWatchlist;
       } catch (error) {
+        console.error("Error in addToWatchlist resolver:", error);
         throw new Error("Failed to add to watchlist.");
       }
     },
