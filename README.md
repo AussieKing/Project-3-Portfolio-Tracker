@@ -146,6 +146,7 @@ Add STRIPE to take donations - []
 
 ## ISUES FACED:
 - commentary : I was trying to leave as many comments as possible, but turns out that that can lead to a tonne of warnings. So I had to remove some of them. I'll try to add as many as possible.
+- Heroku X Firebase authentication : I was trying to use Firebase for authentication on the deployed app, but it kept having errors. I had to include the .env file in the gitignore, and then I had to include the API key in the Heroku config vars. But it still didn't work. Turns out that you have to configure the Heroku app to use the .env file. Then, also add the deployed heroku app html as an authorized domain in the firebase console. Then it worked!
 
 ## LEARNINGS:
 - Shortcuts : the RAFCE shortcut via the ES7 extension in VSCode creates the boilerplate for a functional component.
@@ -195,4 +196,3 @@ T- here are no major disparities in the number of GitHub contributions between g
 - Charts not working 
 - Firebase API call not working in Heroku
 
-hello

@@ -1,3 +1,6 @@
+//! COINPAGE
+//? This page is the page that is displayed when a user clicks on a coin from the home page. It displays the coin's information, description.
+
 import { Button, LinearProgress, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -8,7 +11,7 @@ import CoinInfo from "../components/CoinInfo";
 import { SingleCoin } from "../config/api";
 import { numberWithCommas } from "../components/Banner/Carousel";
 import { CryptoState } from "./CryptoContext";
- 
+
 const CoinContainer = styled("div")(({ theme }) => ({
   display: "flex",
   [theme.breakpoints.down("md")]: {
@@ -66,32 +69,19 @@ const CoinMarketData = styled("div")(({ theme }) => ({
 }));
 
 //TODO : This is the function for the database : currently setup in Firebase. Need to refactor it to work with MongoDB
-// const addToWatchlist = async (coin) => {
-//   try {
-//     let watchlist = await Watchlist.findOne({ userId: user.uid }); // Assuming user has a unique uid
-    
-//     if (!watchlist) {
-//       watchlist = new Watchlist({
-//         userId: user.uid,
-//         coins: [],
-//       });
-//     }
-
-//     const coinData = {
-//       coinId: coin.id,
-//       name: coin.name,
-//       image: coin.image.large,
-//       currentPrice: coin.market_data.current_price[currency.toLowerCase()],
-//     };
-
-//     watchlist.coins.push(coinData);
-//     await watchlist.save();
-    
-//     alert("Coin added to watchlist!"); // Provide some feedback to the user
-//   } catch (error) {
-//     console.error("Failed to add to watchlist", error);
-//   }
-// };
+const addToWatchlist = async (coinData) => {
+  try {
+    const response = await axios.post("http://localhost:3001/watchlist/add", {
+      userId: user?.uid,
+      coin: coinData,
+    });
+    if (response.data) {
+      alert("Coin added to watchlist!");
+    }
+  } catch (error) {
+    console.error("Failed to add to watchlist", error);
+  }
+};
 //TODO above - need to setup the database to work with MongoDB
 
 const CoinPage = () => {
@@ -173,7 +163,7 @@ const CoinPage = () => {
             </Typography>
           </span>
           <span style={{ display: "flex" }}>
-          {user && (
+            {user && (
               <Button
                 variant="contained"
                 sx={{
@@ -183,10 +173,18 @@ const CoinPage = () => {
                   backgroundColor: "goldenrod",
                   color: "black",
                   ":hover": {
-                  backgroundColor: "gold",
+                    backgroundColor: "gold",
                   },
                 }}
-                // onClick={() => addToWatchlist(coin)} //TODO : This is the function for the database : currently setup in Firebase. Need to refactor it to work with MongoDB
+                onClick={() =>
+                  addToWatchlist({
+                    coinId: coin?.id,
+                    name: coin?.name,
+                    image: coin?.image.large,
+                    currentPrice:
+                      coin?.market_data.current_price[currency.toLowerCase()],
+                  })
+                }
               >
                 Add to Watchlist
               </Button>

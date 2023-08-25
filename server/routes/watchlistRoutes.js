@@ -1,3 +1,5 @@
+//! WATCHLIST ROUTES
+
 const express = require('express');
 const router = express.Router();
 const Watchlist = require('../models/Watchlist');
