@@ -1,0 +1,15 @@
+/* APP.css */
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;800&display=swap');
+
+/* reset basic styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  color: goldenrod;
+}

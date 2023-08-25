@@ -1,65 +1,21 @@
 {
-  "name": "portfolio-tracker",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@apollo/client": "^3.8.1",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/lab": "^5.0.0-alpha.140",
-    "@mui/material": "^5.14.5",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.4.0",
-    "chart.js": "^3.5.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-graphql": "^0.12.0",
-    "firebase": "^10.3.0",
-    "graphql": "^15.8.0",
-    "html-react-parser": "^4.2.1",
-    "jsonwebtoken": "^9.0.1",
-    "mongodb": "^5.8.1",
-    "mongoose": "^7.4.4",
-    "react": "^18.2.0",
-    "react-alice-carousel": "^2.7.1",
-    "react-chartjs-2": "^4.0.0",
-    "react-dom": "^18.2.0",
-    "react-google-button": "^0.7.2",
-    "react-router-dom": "^6.15.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
+  "name": "project-3-portfolio-tracker",
+  "version": "1.0.0",
+  "description": "## TECHNOLOGIES USED: - React JS  (https://reactjs.org/)     - React Router DOM - Chart JS (https://www.chartjs.org/) - Material UI as React Library (https://mui.com/) - GoogleFonts (https://fonts.google.com/specimen/Inconsolata) - 300, 400, 800 - Unsplash (Banner image by Javier Miranda https://unsplash.com/photos/MrWOCGKFVDg?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink ) - Coingecko API : (https://www.coingecko.com/en/api) - Axios : to handle API requests (https://www.npmjs.com/package/axios) - React Alice Carousel: npm i react-alice-carousel (https://www.npmjs.com/package/react-alice-carousel) - html-react-oarser : `npm i html-react-parser` (https://www.npmjs.com/package/html-react-parser) - react-chartjs-2 : `npm i react-chartjs-2` (https://www.npmjs.com/package/react-chartjs-2) - react google button : `npm i react-google-button` (https://www.npmjs.com/package/react-google-button) - dotenv : `npm i dotenv` (https://www.npmjs.com/package/dotenv) - graphql : `npm i graphql` (https://www.npmjs.com/package/graphql) - apollo-server-express : `npm i apollo-server-express` (https://www.npmjs.com/package/apollo-server-express) - mongoose : `npm i mongoose` (https://www.npmjs.com/package/mongoose) - bcrypt : `npm i bcrypt` (https://www.npmjs.com/package/bcrypt) - jsonwebtoken : `npm i jsonwebtoken` (https://www.npmjs.com/package/jsonwebtoken)",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "server": "nodemon server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "concurrently \"cd client && npm run build\" \"cd server && npm run server\" ",
+    "start": "npm run build && cd server && node server.js",
+    "server": "cd server node server.js --ignore client",
+    "build": "cd client && npm run build",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "client": "cd client && npm start"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "proxy": "https://api.coingecko.com",
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "nodemon": "^3.0.1"
+    "concurrently": "^5.2.0"
   }
 }
