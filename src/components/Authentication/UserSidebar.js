@@ -7,12 +7,12 @@ import * as React from "react";
 import Drawer from "@mui/material/Drawer";
 import { Avatar, Typography, Button } from "@mui/material"; // Updated Button import
 import { CryptoState } from "../../Pages/CryptoContext";
-import { styled } from '@mui/system';
-import { auth } from '../../firebase';
-import { useQuery } from '@apollo/client';
-import { GET_WATCHLIST } from '../graphql/queries';
+import { styled } from "@mui/system";
+import { auth } from "../../firebase";
+import { useQuery } from "@apollo/client";
+import { GET_WATCHLIST } from '../../graphql/queries';
 
-const StyledContainer = styled('div')(({ theme }) => ({
+const StyledContainer = styled("div")(({ theme }) => ({
   width: 350,
   height: "100%",
   padding: 25,
@@ -29,8 +29,8 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 const UserName = styled(Typography)(({ theme }) => ({
-  fontWeight: 'bolder',
-  width: "100%",  
+  fontWeight: "bolder",
+  width: "100%",
   textAlign: "center",
   wordWrap: "break-word",
   fontSize: 20,
@@ -38,23 +38,23 @@ const UserName = styled(Typography)(({ theme }) => ({
 
 const UserEmail = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
-  fontWeight: 'bolder',
-  width: "100%",  
+  fontWeight: "bolder",
+  width: "100%",
   textAlign: "center",
   wordWrap: "break-word",
   fontSize: 20,
 }));
 
 const LogoutButton = styled(Button)(({ theme }) => ({
-  position: 'absolute',
+  position: "absolute",
   bottom: theme.spacing(2),
-  alignSelf: 'center',
-  backgroundColor: 'goldenrod',
+  alignSelf: "center",
+  backgroundColor: "goldenrod",
 }));
 
-const Watchlist = styled('div')(({ theme }) => ({
+const Watchlist = styled("div")(({ theme }) => ({
   fontSize: 15,
-  textShadow: '0 0 5px black',
+  textShadow: "0 0 5px black",
   flex: 1,
   height: "200px",
   width: "100%",
@@ -78,11 +78,14 @@ const Watchlist = styled('div')(({ theme }) => ({
 
 // using the firebase auth to sign out the user, taking the user to the login page
 const handleLogout = () => {
-  auth.signOut().then(() => {
-    console.log('User signed out');
-  }).catch((error) => {
-    console.error('Error signing out:', error);
-  });
+  auth
+    .signOut()
+    .then(() => {
+      console.log("User signed out");
+    })
+    .catch((error) => {
+      console.error("Error signing out:", error);
+    });
 };
 
 export default function UserSidebar() {
@@ -118,7 +121,9 @@ export default function UserSidebar() {
     data.getWatchlist.coins.map((coin) => (
       <div key={coin.coinId}>
         <img src={coin.image} alt={coin.name} width={30} />
-        <span>{coin.name}: ${coin.currentPrice}</span>
+        <span>
+          {coin.name}: ${coin.currentPrice}
+        </span>
       </div>
     ))
   ) : (
@@ -145,27 +150,19 @@ export default function UserSidebar() {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
-            
             <StyledContainer>
-              <StyledAvatar 
+              <StyledAvatar
                 src={user?.photoURL}
                 alt={user?.displayName || user?.email}
               />
               <UserName variant="h6">{user?.displayName}</UserName>
               <UserEmail variant="body2">{user?.email}</UserEmail>
 
-              {/* working on having the favorites list here */}
-            {user.displayName || user.email}
-            <Watchlist>
-            {watchlistContent}
-            </Watchlist>
-
+              {/* Displaying the watchlist content */}
+              <Watchlist>{watchlistContent}</Watchlist>
             </StyledContainer>
 
-            <LogoutButton 
-              variant="contained"
-              onClick={handleLogout}
-            >
+            <LogoutButton variant="contained" onClick={handleLogout}>
               Logout
             </LogoutButton>
           </Drawer>
