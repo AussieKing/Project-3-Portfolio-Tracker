@@ -1,3 +1,5 @@
+//! RESOLVERS
+
 const Watchlist = require('../models/Watchlist');
 
 module.exports = {
@@ -16,6 +18,37 @@ module.exports = {
       return watchlist;
     } catch (error) {
       throw new Error("Failed to add to watchlist.");
+    }
+  },
+
+  removeFromWatchlist: async ({ userId, coinId }) => {
+    try {
+      const watchlist = await Watchlist.findOne({ userId });
+
+      if (!watchlist) {
+        throw new Error("Watchlist not found.");
+      }
+
+      // Remove the coin from the array
+      watchlist.coins = watchlist.coins.filter(coin => coin.coinId !== coinId);
+
+      await watchlist.save();
+
+      return watchlist;
+    } catch (error) {
+      throw new Error("Failed to remove from watchlist.");
+    }
+  },
+
+  getWatchlist: async ({ userId }) => {
+    try {
+      const watchlist = await Watchlist.findOne({ userId });
+      if (!watchlist) {
+        throw new Error("Watchlist not found.");
+      }
+      return watchlist;
+    } catch (error) {
+      throw new Error("Failed to fetch watchlist.");
     }
   }
 };

@@ -1,3 +1,5 @@
+//! SCHEMA
+
 const { buildSchema } = require('graphql');
 
 module.exports = buildSchema(`
@@ -15,6 +17,11 @@ module.exports = buildSchema(`
 
   type Mutation {
     addToWatchlist(userId: String!, coin: CoinInput!): Watchlist!
+    removeFromWatchlist(userId: String!, coinId: String!): Watchlist!
+  }
+
+  type Query {
+    getWatchlist(userId: String!): Watchlist!
   }
 
   input CoinInput {

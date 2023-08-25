@@ -1,3 +1,5 @@
+//! WATCHLIST MODEL
+
 const mongoose = require('mongoose');
 
 const WatchlistSchema = mongoose.Schema({
