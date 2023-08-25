@@ -13,6 +13,7 @@
 - html-react-oarser : `npm i html-react-parser` (https://www.npmjs.com/package/html-react-parser)
 - react-chartjs-2 : `npm i react-chartjs-2` (https://www.npmjs.com/package/react-chartjs-2)
 - react google button : `npm i react-google-button` (https://www.npmjs.com/package/react-google-button)
+- dotenv : `npm i dotenv` (https://www.npmjs.com/package/dotenv)
 
 ## DEPENDENCIES:
 - React Router DOM

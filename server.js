@@ -1,16 +1,16 @@
 const express = require('express');
-const connectDB = require('./utils/db');
-const expressGraphQL = require('express-graphql');
+const connectDB = require('./backend/utils/db');
 
-const schema = require('./graphql/schema');
-const resolvers = require('./graphql/resolvers');
+const schema = require('./backend/graphql/schema');
+const resolvers = require('./backend/graphql/resolver');
+const { graphqlHTTP } = require('express-graphql');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
-app.use('/graphql', expressGraphQL({
+app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: resolvers,
   graphiql: true
