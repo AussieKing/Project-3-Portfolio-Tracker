@@ -44,11 +44,11 @@ module.exports = {
     try {
       const watchlist = await Watchlist.findOne({ userId });
       if (!watchlist) {
-        throw new Error("Watchlist not found.");
+        throw new Error('Watchlist not found for this user.');
       }
       return watchlist;
     } catch (error) {
-      throw new Error("Failed to fetch watchlist.");
+      throw new Error(error.message);
     }
   }
 };
