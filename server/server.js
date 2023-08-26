@@ -9,6 +9,7 @@ const cors = require('cors');
 const { ApolloServer, gql } = require('apollo-server-express');
 const fs = require('fs');
 const path = require('path');
+const admin = require('./firebaseAdmin');
 
 const typeDefs = gql(fs.readFileSync(path.join(__dirname, './graphql/schema.graphql'), 'utf-8'));
 const resolvers = require('./graphql/resolver');
@@ -16,27 +17,37 @@ const resolvers = require('./graphql/resolver');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// JSON parsing middleware
 app.use(express.json());
-
-// CORS configuration middleware
 app.use(cors());
 
-// Logging middleware
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request on ${req.url}`);
-  next();
+  
+  const token = req.headers.authorization || ''; // Assuming your token is passed in the authorization header
+
+  admin.auth().verifyIdToken(token)
+    .then((decodedToken) => {
+      req.user = decodedToken; // Storing the decoded token in the request object
+      next();
+    })
+    .catch((error) => {
+      console.error('Error verifying token:', error);
+      next();
+    });
 });
 
-// Connect to database
 connectDB();
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => {
+    return {
+      user: req.user // Passing the decoded user's token to Apollo's context
+    };
+  }
 });
 
-// Ensure the ApolloServer is started before applying the middleware
 (async () => {
   await server.start();
   server.applyMiddleware({ app, path: '/graphql' });
