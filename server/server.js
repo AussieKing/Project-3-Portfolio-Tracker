@@ -1,12 +1,14 @@
-//! SERVER
+require('dotenv').config();
 
 const express = require('express');
 const connectDB = require('./utils/db');
 const cors = require('cors');
+const { ApolloServer, gql } = require('apollo-server-express');
+const fs = require('fs');
+const path = require('path');
 
-const schema = require('./graphql/schema');
+const typeDefs = gql(fs.readFileSync(path.join(__dirname, './graphql/schema.graphql'), 'utf-8'));
 const resolvers = require('./graphql/resolver');
-const { graphqlHTTP } = require('express-graphql');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,9 +17,7 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 
 // CORS configuration middleware
-app.use(cors({
-  origin: 'http://localhost:3000'
-}));
+app.use(cors());
 
 // Logging middleware
 app.use((req, res, next) => {
@@ -25,23 +25,21 @@ app.use((req, res, next) => {
   next();
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
 // Connect to database
 connectDB();
 
-// GraphQL endpoint
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: resolvers,
-  graphiql: true
-}));
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+// Ensure the ApolloServer is started before applying the middleware
+(async () => {
+  await server.start();
+  server.applyMiddleware({ app, path: '/graphql' });
+})();
 
 app.listen(PORT, () => {
   console.log(`API server running on port ${PORT}!`);
-  console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+  console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
 });
