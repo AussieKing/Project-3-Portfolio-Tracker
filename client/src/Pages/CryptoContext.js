@@ -28,33 +28,88 @@ const CryptoContext = ({ children }) => {
       )  // takes the auth and gives a callback function
 }, [])
 
-  useEffect(() => {  // useEffect to run whatever is rendered inside the component
-  
-  //! POTENTIAL ERROR HERE: do I need to add the fetchCoins function here???
-  if (currency === 'USD') setSymbol('$');
-    else if (currency === 'EUR') setSymbol('€');
-    else if (currency === 'GBP') setSymbol('£');
-    else if (currency === 'AUD') setSymbol('A$');
-  }, [currency]);  // adding the currency as a dependency
+//! NEW fetchCoins function
 
-  return (  // wrapping the whole app in the Crypto context provider
-  <Crypto.Provider value={{
-    currency, 
-    symbol, 
-    setCurrency, 
-    coins, 
-    loading, 
-    alert, 
-    setAlert,
-    user,
+const fetchCoins = async () => {
+  setLoading(true);
+  try {
+    const response = await fetch(
+      `https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=${currency}&days=1`
+    );
+    const data = await response.json();
+    setCoins(data);
+  } catch (error) {
+    console.error("Error fetching the coin data:", error);
+    setAlert({
+      open: true,
+      message: "Error fetching coin data",
+      type: "error",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  fetchCoins(); // Call the function when the component mounts or currency changes
+}, [currency]);
+
+useEffect(() => {
+  if (currency === "USD") setSymbol("$");
+  else if (currency === "EUR") setSymbol("€");
+  else if (currency === "GBP") setSymbol("£");
+  else if (currency === "AUD") setSymbol("A$");
+}, [currency]);
+
+return (
+  <Crypto.Provider
+    value={{
+      currency,
+      symbol,
+      setCurrency,
+      coins,
+      loading,
+      alert,
+      setAlert,
+      user,
     }}
   >
     {children}
   </Crypto.Provider>
-  )
-}
+);
+};
 
 export default CryptoContext;
-export const CryptoState = () => {   // custom hook to get the state, create a new file called CryptoState.js
-  return useContext(Crypto); 
-}
+export const CryptoState = () => {
+return useContext(Crypto);
+};
+
+//   useEffect(() => {  // useEffect to run whatever is rendered inside the component
+  
+//   if (currency === 'USD') setSymbol('$');
+//     else if (currency === 'EUR') setSymbol('€');
+//     else if (currency === 'GBP') setSymbol('£');
+//     else if (currency === 'AUD') setSymbol('A$');
+//   }, [currency]);  // adding the currency as a dependency
+
+//   return (  // wrapping the whole app in the Crypto context provider
+//   <Crypto.Provider value={{
+//     currency, 
+//     symbol, 
+//     setCurrency, 
+//     coins, 
+//     loading, 
+//     alert, 
+//     setAlert,
+//     user,
+//     }}
+//   >
+//     {children}
+//   </Crypto.Provider>
+//   )
+// }
+
+// export default CryptoContext;
+// export const CryptoState = () => {   // custom hook to get the state, create a new file called CryptoState.js
+//   return useContext(Crypto); 
+// }

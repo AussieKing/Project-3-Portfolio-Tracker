@@ -68,22 +68,6 @@ const CoinMarketData = styled("div")(({ theme }) => ({
   },
 }));
 
-//TODO : This is the function for the database : currently setup in Firebase. Need to refactor it to work with MongoDB
-// const addToWatchlist = async (coinData) => {
-//   try {
-//     const response = await axios.post("http://localhost:3001/watchlist/add", {
-//       userId: user?.uid,
-//       coin: coinData,
-//     });
-//     if (response.data) {
-//       alert("Coin added to watchlist!");
-//     }
-//   } catch (error) {
-//     console.error("Failed to add to watchlist", error);
-//   }
-// };
-//TODO above - need to setup the database to work with MongoDB
-
 const CoinPage = () => {
   const { id } = useParams();
   const [coin, setCoin] = useState();
