@@ -1,3 +1,6 @@
+//! SERVER.JS
+//? The server.js file is the entry point for the application. It is responsible for connecting to the database, starting the ApolloServer, and starting the Express.js server.
+
 require('dotenv').config();
 
 const express = require('express');
