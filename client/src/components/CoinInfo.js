@@ -1,7 +1,10 @@
+//! COININFO
+//? This component is responsible for displaying the chart of the coin, and the buttons to change the time frame of the chart.
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { HistoricalChart } from "../config/api";
-import { Line } from "react-chartjs-2";
+// import { Line } from "react-chartjs-2";  //TODO: use this to reintroduce the chart at a later date
 import { CircularProgress, Typography, ThemeProvider } from "@mui/material";
 import { styled, createTheme } from "@mui/material/styles";
 import SelectButton from "./SelectButton";
@@ -41,64 +44,42 @@ const CoinInfo = ({ coin }) => {
   const [flag, setFlag] = useState(false); // flag to check if the data is fetched or not.
 
   const fetchHistoricData = async () => {
-    // function to fetch the historical data of the coin, using the HistoricalChart API.
-    const { data } = await axios.get(HistoricalChart(coin.id, days, currency)); // get the data from the API (using axios), display the did, days and currency.
-    setFlag(true);
-    setHistoricData(data.prices); // we just want the prices from the data, so we set the state to data.prices.
+    //!Loggin the request URL for debugging purposes
+    console.log(HistoricalChart(coin.id, days, currency));
+    console.log("Coin ID:", coin.id);
+    console.log("Days:", days);
+    console.log("Currency:", currency);
+    // 
+
+    try {
+      const response = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin.id}/market_chart?vs_currency=${currency}&days=${days}`);
+      console.log("API response:", response);
+
+      if (response && response.data && response.data.prices) {
+        setHistoricData(response.data.prices);
+        setFlag(true);
+      } else {
+        console.error("Expected data structure not found:", response);
+      }
+    } catch (error) {
+      console.error("Error fetching historical data:", error);
+    }
   };
 
   useEffect(() => {
     fetchHistoricData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [days]); // we want to fetch the data whenever the days change.
+  }, [days]);
 
   return (
-    // importing the dark theme from MUI and wrapping the component in the ThemeProvider.
+    // ... original render remains unchanged
     <ThemeProvider theme={darkTheme}>
       <CoinContainer>
         {!historicData || flag === false ? (
-          <CircularProgress
-            style={{ color: "gold" }}
-            size={250}
-            thickness={1}
-          />
+          <CircularProgress style={{ color: "gold" }} size={250} thickness={1} />
         ) : (
-          // if the data is not fetched, display a circular progress ba, otherwise display the chart.
           <>
-
-{/* ISSUE FROM HERE */}
-
-            {/* Chart */}
-            {/* <Line
-              data={{
-                labels: historicData.map((coin) => {  // map through the historic data and return the date and time of the coin.
-                  let date = new Date(coin[0]);  // the date is in UNIX format, so we convert it to a readable format (the 0 index is the date, the 1 index is the price)
-                  let time =  // vanilla JS to convert the time to AM/PM format.
-                    date.getHours() > 12
-                      ? `${date.getHours() - 12}:${date.getMinutes()} PM`
-                      : `${date.getHours()}:${date.getMinutes()} AM`;
-                  return days === 1 ? time : date.toLocaleDateString();  // datasets below
-                }),
-
-                datasets: [
-                  {
-                    data: historicData.map((coin) => coin[1]),  // take price (index 1) from the historic data, and map through it.
-                    label: `Price ( Past ${days} Days ) in ${currency}`,   // labels in the past ${days} days in ${currency}
-                    borderColor: "#EEBC1D",
-                  },
-                ],
-              }}
-              options={{  // to remove the legend, and to make the chart responsive, and get rid of the gridlines.
-                elements: {
-                  point: {
-                    radius: 1,
-                  },
-                },
-              }}
-            /> */}
-
-{/* ISSUE TO HERE */}
-
+            {/* TODO: MAYBE reintroducing the Chart component here at a later date */}
             <div
               style={{
                 display: "flex",
@@ -108,13 +89,10 @@ const CoinInfo = ({ coin }) => {
               }}
             >
               {chartDays.map(
-                (
-                  day // map through the chartDays array and return the days. File is in config/data.js, to make it easier to change the days.
-                ) => (
+                (day) => (
                   <SelectButton
-                    key={day.value} // key is the value of the day.
+                    key={day.value}
                     onClick={() => {
-                      // and when the button is clicked, set the days to the value of the day, and set the flag to false.
                       setDays(day.value);
                       setFlag(false);
                     }}
@@ -133,3 +111,4 @@ const CoinInfo = ({ coin }) => {
 };
 
 export default CoinInfo;
+

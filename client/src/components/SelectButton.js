@@ -1,3 +1,6 @@
+//! SELECT BUTTON COMPONENT
+//? This component is used to create the buttons for the user to select the type of search they want to perform.
+
 import { styled } from "@mui/material/styles";
 
 const StyledButton = styled('span')(({ theme, selected }) => ({  // we want a span element, and we want to pass the theme and selected props.

@@ -115,9 +115,9 @@ Database Setup.
     d. Connect to DB [x]
     e. Create User [x]
     f. Login User [x]
-    g. Auth Middleware []
+    g. Auth Middleware [x]
     h. Get User []
-    i. Logout User []
+    i. Logout User [x]
 
 ## STEP 16 :
 User Sidebar/Watchlist Page.
@@ -176,18 +176,18 @@ T- here are no major disparities in the number of GitHub contributions between g
 - Your group should clearly and concisely articulate your project idea.
 
 ### Technical Acceptance Criteria: 25%   []
-- Satisfies the following code requirements:
-- Application uses React for the front end.
-- Application has a GraphQL API with a Node.js and Express.js server, and uses queries and mutations for retrieving, adding, updating, and deleting data.
-- Application uses MongoDB and the Mongoose ODM for the database and protects sensitive API key information on the server.
-- Application includes user authentication using JWT.
+- Satisfies the following code requirements: 
+- Application uses React for the front end.  [x]
+- Application has a GraphQL API with a Node.js and Express.js server, and uses queries and mutations for retrieving, adding, updating, and deleting data.  [x]
+- Application uses MongoDB and the Mongoose ODM for the database and protects sensitive API key information on the server. [x]
+- Application includes user authentication using JWT.  []
 
 ### Deployment: 20%  []
 - Application deployed at live URL on Heroku and loads with no errors.
 - Application GitHub URL submitted.
 
 ### Application Quality: 15%   []
-- Application user experience is intuitive and easy to navigate.
+- Application user experience is intuitive and easy to navigate.  
 - Application user interface style is clean and polished.
 - Application is responsive.
 

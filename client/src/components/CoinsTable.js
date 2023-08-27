@@ -1,3 +1,6 @@
+//! COINTABLE
+//? This component is used to display the top 100 cryptocurrencies by market cap. It uses the CoinGecko API to fetch the data and displays it in a table. The table is paginated and the user can search for a specific cryptocurrency. The user can also click on a cryptocurrency to view more details about it.
+
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { CryptoState } from "../Pages/CryptoContext";

@@ -1,3 +1,6 @@
+//! HEADER
+//? This component is the header of the application. It contains the logo, the currency selector and the login/logout button.
+
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
