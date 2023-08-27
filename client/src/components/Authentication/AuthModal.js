@@ -1,4 +1,5 @@
 //! AUTHENTICATION MODAL COMPONENT
+//? This component is a modal that pops up when the user clicks the login button.
 
 import * as React from "react";
 import Backdrop from "@mui/material/Backdrop";

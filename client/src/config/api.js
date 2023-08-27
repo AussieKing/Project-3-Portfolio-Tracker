@@ -1,3 +1,6 @@
+//! API
+//? this is the API call to get the data for the coin
+
 const PROXY_URL = `${process.env.REACT_APP_PROXY_BASE_URL}/proxy?url=`;
 
 // Coingecko APIs for price Action.

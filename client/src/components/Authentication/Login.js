@@ -1,3 +1,6 @@
+//! LOGIN 
+//? This component is used to login the user via firebase auth
+
 import React from 'react'
 import { Box, TextField, Button } from '@mui/material';
 import { useState } from 'react';

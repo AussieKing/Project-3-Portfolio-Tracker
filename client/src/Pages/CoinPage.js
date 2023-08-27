@@ -1,5 +1,5 @@
 //! COINPAGE
-//? This page is the page that is displayed when a user clicks on a coin from the home page. It displays the coin's information, description.
+//? Frontend: This page is the page that is displayed when a user clicks on a coin from the home page. It displays the coin's information, description.
 
 import { Button, LinearProgress, Typography } from "@mui/material";
 import axios from "axios";
@@ -12,6 +12,7 @@ import { SingleCoin } from "../config/api";
 import { numberWithCommas } from "../components/Banner/Carousel";
 import { CryptoState } from "./CryptoContext";
 import { ADD_TO_WATCHLIST } from '../graphql/mutations'; // Adjust the path if necessary
+import { GET_WATCHLIST } from '../graphql/queries'; // Adjust the path if necessary
 import { useMutation } from '@apollo/client';
 
 
@@ -76,8 +77,12 @@ const CoinPage = () => {
   const [coin, setCoin] = useState();
   const { currency, symbol, user } = CryptoState();
 
-  const [addToWatchlistGQL, { data, loading, error }] = useMutation(ADD_TO_WATCHLIST);
-
+  //! WORKING VERSION
+  // const [addToWatchlistGQL, { data, loading, error }] = useMutation(ADD_TO_WATCHLIST);
+  //! TESTING VERSION:
+  const [addToWatchlistGQL, { data, loading, error }] = useMutation(ADD_TO_WATCHLIST, {
+    refetchQueries: [{ query: GET_WATCHLIST, variables: { userId: user?.email } }]
+  });
 
   const addToWatchlist = async (coinData) => {
     try {
@@ -87,15 +92,18 @@ const CoinPage = () => {
           coin: coinData,
         },
       });
-      if (response.data && response.data.addToWatchlist) {
-        alert("Coin added to watchlist!");
+      const responseData = response.data.addToWatchlist;
+
+      if (responseData && responseData.success) {
+        alert(responseData.message);
+      } else {
+        alert(responseData.message);
       }
     } catch (error) {
       console.error("Failed to add to watchlist", error);
     }
   };
   
-
   const fetchCoin = async () => {
     const { data } = await axios.get(SingleCoin(id));
     setCoin(data);

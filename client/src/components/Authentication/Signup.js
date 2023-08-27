@@ -1,4 +1,5 @@
 //! SIGNUP COMPONENT
+// //? This component is a form that allows the user to sign up for an account.
 
 import React from "react";
 import { useState } from "react";

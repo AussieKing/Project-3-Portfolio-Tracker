@@ -1,4 +1,5 @@
 //! APOLLO CLIENT CONFIGURATION
+//? This file is used to configure the Apollo Client
 
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';

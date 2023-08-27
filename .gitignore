@@ -26,3 +26,5 @@ yarn-debug.log*
 yarn-error.log*
 
 secrets/firebaseKey.json
+
+/firebaseKey.json

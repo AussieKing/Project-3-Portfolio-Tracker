@@ -1,3 +1,4 @@
+//! CONFIG FILE FOR FIREBASE
 // using dotenv to hide firebase config
 
 const firebaseConfig = {
