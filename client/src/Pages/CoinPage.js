@@ -11,6 +11,9 @@ import CoinInfo from "../components/CoinInfo";
 import { SingleCoin } from "../config/api";
 import { numberWithCommas } from "../components/Banner/Carousel";
 import { CryptoState } from "./CryptoContext";
+import { ADD_TO_WATCHLIST } from '../graphql/mutations'; // Adjust the path if necessary
+import { useMutation } from '@apollo/client';
+
 
 const CoinContainer = styled("div")(({ theme }) => ({
   display: "flex",
@@ -73,19 +76,25 @@ const CoinPage = () => {
   const [coin, setCoin] = useState();
   const { currency, symbol, user } = CryptoState();
 
+  const [addToWatchlistGQL, { data, loading, error }] = useMutation(ADD_TO_WATCHLIST);
+
+
   const addToWatchlist = async (coinData) => {
     try {
-      const response = await axios.post("http://localhost:3001/watchlist/add", {
-        userId: user?.uid,
-        coin: coinData,
+      const response = await addToWatchlistGQL({
+        variables: {
+          userId: user?.uid,
+          coin: coinData,
+        },
       });
-      if (response.data) {
+      if (response.data && response.data.addToWatchlist) {
         alert("Coin added to watchlist!");
       }
     } catch (error) {
       console.error("Failed to add to watchlist", error);
     }
   };
+  
 
   const fetchCoin = async () => {
     const { data } = await axios.get(SingleCoin(id));
