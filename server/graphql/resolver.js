@@ -25,60 +25,43 @@ module.exports = {
         throw new Error(error.message);
       }
     },
-    //! HARDCODED FOR DEBUGGING PURPOSES
-    // getWatchlist: async (_, args) => {
-    //   console.log("getWatchlist invoked with args:", args);
-
-    //   return {
-    //     userId: "fede.dordoni@gmail.com",
-    //     coins: [{
-    //       coinId: "testCoinId",
-    //       name: "TestCoin",
-    //       image: "https://sampleurl.com",
-    //       currentPrice: 100.00
-    //     }]
-    //   };
-    // },
   },
   Mutation: {
     addToWatchlist: async (_, args) => {
       console.log("addToWatchlist invoked with args:", args);
-
+    
       const { userId, coin } = args;
       try {
         console.log("Starting addToWatchlist resolver...");
-
+    
         let watchlist = await Watchlist.findOne({ userId });
-
+    
         console.log("Fetched watchlist:", watchlist);
-
+    
         if (!watchlist) {
           console.log("No existing watchlist found. Creating a new one...");
           watchlist = new Watchlist({ userId, coins: [coin] });
         } else {
-          // Check if coin already exists in watchlist
           const coinExists = watchlist.coins.some(
             (existingCoin) => existingCoin.coinId === coin.coinId
           );
-
+    
           if (coinExists) {
-            console.log(
-              "Coin already exists in the watchlist. Not adding again."
-            );
-            return watchlist;
+            console.log("Coin already exists in the watchlist. Not adding again.");
+            throw new Error("Coin is already in the watchlist!");
           } else {
             console.log("Adding coin to existing watchlist...");
             watchlist.coins.push(coin);
           }
         }
         const savedWatchlist = await watchlist.save();
-
+    
         console.log("Saved watchlist:", savedWatchlist);
-
-        return savedWatchlist;
+    
+        return savedWatchlist; // Return the saved watchlist directly
       } catch (error) {
         console.error("Error in addToWatchlist resolver:", error);
-        throw new Error("Failed to add to watchlist.");
+        throw error;
       }
     },
 

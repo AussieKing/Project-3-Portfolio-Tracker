@@ -107,10 +107,15 @@ export default function UserSidebar() {
   const { user } = CryptoState();
 
   // Using Apollo's useQuery hook
+  console.log('User Email:', user.email);
   const { loading, error, data } = useQuery(GET_WATCHLIST, {
     variables: { userId: user?.email },
     skip: !user?.email, // Skip the query if there's no user email
   });
+
+  if (error) {
+    console.error('Apollo Error:', error);
+}
 
   // Watchlist content to display
   const watchlistContent = loading ? (

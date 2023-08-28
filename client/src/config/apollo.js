@@ -10,14 +10,38 @@ const httpLink = new HttpLink({ uri: 'http://localhost:3001/graphql' });
 const authLink = setContext(async (_, { headers }) => {
   // Get the authentication token from Firebase if it exists
   const token = await auth.currentUser?.getIdToken();
+  console.log('Token:', token);
 
   // Return the headers to the context so HTTP link can read them
   return {
     headers: {
       ...headers,
-      authorization: token ? token : "",
+      authorization: token ? `Bearer ${token}` : "",
     }
   }
+
+// const authLink = setContext(async (_, { headers }) => {
+//     console.log('Token:', token);
+
+//   // Get the authentication token from Firebase if it exists
+//   const token = await auth.currentUser?.getIdToken();
+//   console.log('Token:', token);
+
+//   // Return the headers to the context so HTTP link can read them
+
+//   return {
+//     headers: {
+//       ...headers,
+//       authorization: token ? `Bearer ${token}` : "",
+//     }
+// }
+
+  // return {
+  //   headers: {
+  //     ...headers,
+  //     authorization: token ? token : "",
+  //   }
+  // }
 });
 
 const client = new ApolloClient({

@@ -23,11 +23,15 @@ app.use(cors());
 app.use((req, res, next) => {
   console.log(`Received ${req.method} request on ${req.url}`);
   
-  const token = req.headers.authorization || ''; // Assuming your token is passed in the authorization header
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
+  console.log('Extracted Token:', token);
+  
 
   admin.auth().verifyIdToken(token)
     .then((decodedToken) => {
       req.user = decodedToken; // Storing the decoded token in the request object
+      console.log(decodedToken);  //! DEBUGGING PURPOSES
       next();
     })
     .catch((error) => {

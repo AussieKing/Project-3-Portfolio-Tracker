@@ -14,6 +14,7 @@ import { CryptoState } from "./CryptoContext";
 import { ADD_TO_WATCHLIST } from '../graphql/mutations'; // Adjust the path if necessary
 import { GET_WATCHLIST } from '../graphql/queries'; // Adjust the path if necessary
 import { useMutation } from '@apollo/client';
+import { addToWatchlist } from '../helpers/watchlistHelpers';  
 
 
 const CoinContainer = styled("div")(({ theme }) => ({
@@ -80,9 +81,12 @@ const CoinPage = () => {
   //! WORKING VERSION
   // const [addToWatchlistGQL, { data, loading, error }] = useMutation(ADD_TO_WATCHLIST);
   //! TESTING VERSION:
+
   const [addToWatchlistGQL, { data, loading, error }] = useMutation(ADD_TO_WATCHLIST, {
     refetchQueries: [{ query: GET_WATCHLIST, variables: { userId: user?.email } }]
   });
+
+  console.log("User UID from frontend:", user?.uid);
 
   const addToWatchlist = async (coinData) => {
     try {
@@ -93,20 +97,24 @@ const CoinPage = () => {
         },
       });
       const responseData = response.data.addToWatchlist;
-
-      if (responseData && responseData.success) {
-        alert(responseData.message);
-      } else {
-        alert(responseData.message);
-      }
+  
+      // Now handling based on the server's response structure
+      alert(responseData.message);
+  
     } catch (error) {
       console.error("Failed to add to watchlist", error);
+      alert("Error: " + (error?.message || "Unknown error occurred."));
     }
-  };
-  
+  }; 
+
   const fetchCoin = async () => {
-    const { data } = await axios.get(SingleCoin(id));
-    setCoin(data);
+    try {
+      const { data } = await axios.get(SingleCoin(id));
+      setCoin(data);
+    } catch (error) {
+      console.error("Failed to fetch coin data", error);
+      alert("Error: Failed to fetch coin data.");
+    }
   };
 
   useEffect(() => {
