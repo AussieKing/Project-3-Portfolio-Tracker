@@ -5,7 +5,7 @@
 
 import * as React from "react";
 import Drawer from "@mui/material/Drawer";
-import { Avatar, Typography, Button } from "@mui/material"; // Updated Button import
+import { Avatar, Typography, Button } from "@mui/material";
 import { CryptoState } from "../../Pages/CryptoContext";
 import { styled } from '@mui/system';
 import { auth } from '../../firebase';
@@ -28,7 +28,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
 const UserName = styled(Typography)(({ theme }) => ({
   fontWeight: 'bolder',
-  width: "100%",  
+  width: "100%",
   textAlign: "center",
   wordWrap: "break-word",
   fontSize: 20,
@@ -37,7 +37,7 @@ const UserName = styled(Typography)(({ theme }) => ({
 const UserEmail = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
   fontWeight: 'bolder',
-  width: "100%",  
+  width: "100%",
   textAlign: "center",
   wordWrap: "break-word",
   fontSize: 20,
@@ -74,7 +74,6 @@ const Watchlist = styled('div')(({ theme }) => ({
   },
 }));
 
-// using the firebase auth to sign out the user, taking the user to the login page
 const handleLogout = () => {
   auth.signOut().then(() => {
     console.log('User signed out');
@@ -83,8 +82,7 @@ const handleLogout = () => {
   });
 };
 
-export default function UserSidebar() {
-  
+const UserSidebar = () => {
   const [state, setState] = React.useState({
     right: false,
   });
@@ -100,7 +98,7 @@ export default function UserSidebar() {
     setState({ ...state, [anchor]: open });
   };
 
-  const { user } = CryptoState();
+  const { user, watchlist, coins } = CryptoState();
 
   return (
     <div>
@@ -122,23 +120,48 @@ export default function UserSidebar() {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
-            
             <StyledContainer>
-              <StyledAvatar 
+              <StyledAvatar
                 src={user?.photoURL}
                 alt={user?.displayName || user?.email}
               />
               <UserName variant="h6">{user?.displayName}</UserName>
               <UserEmail variant="body2">{user?.email}</UserEmail>
 
-              {/* working on having the favorites list here */}
-            {user.displayName || user.email}
-            <Watchlist>
-              Watchlist
-            </Watchlist>
-
+              <Watchlist>
+                Watchlist
+                {coins.map((coin) => {
+                  if (watchlist.includes(coin.id)) {
+                    return (
+                      <div
+                        sx={{
+                          fontSize: 15,
+                          textShadow: "0 0 5px black",
+                          flex: 1,
+                          height: "200px",
+                          width: "100%",
+                          backgroundColor: "grey",
+                          borderRadius: 10,
+                          padding: 15,
+                          paddingTop: 10,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: 12,
+                          overflowY: "scroll",
+                          scrollbarWidth: "thin",
+                        }}
+                        key={coin.id}
+                      >
+                        <span>{coin.name}</span>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </Watchlist>
             </StyledContainer>
-
+            
             <LogoutButton 
               variant="contained"
               onClick={handleLogout}
@@ -150,4 +173,6 @@ export default function UserSidebar() {
       ))}
     </div>
   );
-}
+};
+
+export default UserSidebar;

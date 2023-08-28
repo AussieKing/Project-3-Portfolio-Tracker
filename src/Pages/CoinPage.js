@@ -1,26 +1,33 @@
-import { Button, LinearProgress, Typography } from "@mui/material";
+//! COINPAGE
+//? This page is the page that is rendered when a user clicks on a coin from the home page. It displays the coin's name, image, description, and price. It also allows the user to add the coin to their watchlist.
+//? It is made using the MUI Grid component.
+
+import React, { useEffect, useState } from "react";
+import { Button, LinearProgress, Typography, styled } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { styled } from "@mui/system";
-import parse from "html-react-parser"; // gets rid of the html tags in the description of the data returned from the API
+import parse from "html-react-parser";
 import CoinInfo from "../components/CoinInfo";
 import { SingleCoin } from "../config/api";
 import { numberWithCommas } from "../components/Banner/Carousel";
 import { CryptoState } from "./CryptoContext";
- 
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+
 const CoinContainer = styled("div")(({ theme }) => ({
   display: "flex",
-  [theme.breakpoints.down("md")]: {
-    flexDirection: "column",
-    alignItems: "center",
+  flexDirection: "column",
+  alignItems: "center",
+  [theme.breakpoints.up("md")]: {
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
 }));
 
 const CoinSidebar = styled("div")(({ theme }) => ({
-  width: "30%",
-  [theme.breakpoints.down("md")]: {
-    width: "100%",
+  width: "100%",
+  [theme.breakpoints.up("md")]: {
+    width: "30%",
   },
   display: "flex",
   flexDirection: "column",
@@ -29,63 +36,51 @@ const CoinSidebar = styled("div")(({ theme }) => ({
   borderRight: "2px solid grey",
 }));
 
-const CoinHeading = styled(Typography)(({ theme }) => ({
-  fontWeight: "bold",
-  marginBottom: 20,
-  fontFamily: "Montserrat",
-}));
-
-const CoinDescription = styled(Typography)(({ theme }) => ({
-  width: "100%",
-  fontFamily: "Montserrat",
-  padding: 25,
-  paddingBottom: 15,
-  paddingTop: 0,
-  textAlign: "justify",
-}));
-
-const CoinMarketData = styled("div")(({ theme }) => ({
-  alignSelf: "start",
-  padding: 25,
-  paddingTop: 10,
-  width: "100%",
-  [theme.breakpoints.down("md")]: {
-    // for medium screens and below
-    display: "flex", // display the data in a row and flex
-    justifyContent: "space-around",
-  },
-  [theme.breakpoints.down("sm")]: {
-    // for small screens and below
-    flexDirection: "column", // display the data in a column
-    alignItems: "center",
-  },
-  [theme.breakpoints.down("xs")]: {
-    // for extra small screens and below
-    alignItems: "start", // align the data to the start
-  },
-}));
-
-//TODO : This is the function for the database : currently setup in Firebase. Need to refactor it to work with MongoDB
-// const addToWatchlist = () => {
-// }
-//TODO above - need to setup the database to work with MongoDB
-
 const CoinPage = () => {
   const { id } = useParams();
   const [coin, setCoin] = useState();
-  const { currency, symbol, user } = CryptoState();
+  const { user, watchlist, setAlert } = CryptoState();
 
   const fetchCoin = async () => {
-    const { data } = await axios.get(SingleCoin(id));
-    setCoin(data);
+    try {
+      const { data } = await axios.get(SingleCoin(id));
+      setCoin(data);
+    } catch (error) {
+      console.error("Error fetching coin data:", error);
+    }
   };
 
   useEffect(() => {
     fetchCoin();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!coin) return <LinearProgress style={{ backgroundColor: "gold" }} />;
+
+  const isCoinInWatchlist = watchlist.includes(coin?.id);
+
+  const toggleWatchlist = async () => {
+    if (!user) return;
+
+    const updatedWatchlist = isCoinInWatchlist
+      ? watchlist.filter(itemId => itemId !== coin.id)
+      : [...watchlist, coin.id];
+
+    const coinRef = doc(db, "watchlist", user.uid);
+
+    try {
+      await setDoc(coinRef, { coins: updatedWatchlist });
+
+      setAlert({
+        open: true,
+        message: isCoinInWatchlist
+          ? `${coin.name} removed from watchlist!`
+          : `${coin.name} added to watchlist!`,
+        type: "success",
+      });
+    } catch (error) {
+      console.log("Error updating watchlist:", error);
+    }
+  };
 
   return (
     <CoinContainer>
@@ -96,84 +91,38 @@ const CoinPage = () => {
           height="200"
           style={{ marginBottom: 20 }}
         />
-        <CoinHeading variant="h3">{coin?.name}</CoinHeading>
-        <CoinDescription variant="subtitle1">
-          {parse(coin?.description.en.split(". ")[0])}{" "}
-          {/* parse the description (in english) of the coin to get rid of the html tags */}
-        </CoinDescription>
-        <CoinMarketData>
+        <Typography variant="h3">
+          {coin?.name}
+        </Typography>
+        <Typography variant="subtitle1">
+          {parse(coin?.description.en.split(". ")[0])}.
+        </Typography>
+        <div>
           <span style={{ display: "flex" }}>
-            <CoinHeading variant="h5">Rank:</CoinHeading>
-            &nbsp; &nbsp;
-            <Typography
-              variant="h5"
-              style={{
-                fontFamily: "Montserrat",
-              }}
-            >
-              {numberWithCommas(coin?.market_cap_rank)}
-            </Typography>
-          </span>
-
-          <span style={{ display: "flex" }}>
-            <CoinHeading variant="h5">Current Price:</CoinHeading>
-            &nbsp; &nbsp;
-            <Typography
-              variant="h5"
-              style={{
-                fontFamily: "Montserrat",
-              }}
-            >
-              {symbol}{" "}
-              {numberWithCommas(
-                coin?.market_data.current_price[currency.toLowerCase()]
-              )}
-            </Typography>
-          </span>
-          <span style={{ display: "flex" }}>
-            <CoinHeading variant="h5">Market Cap:</CoinHeading>
-            &nbsp; &nbsp;
-            <Typography
-              variant="h5"
-              style={{
-                fontFamily: "Montserrat",
-              }}
-            >
-              {symbol}{" "}
-              {numberWithCommas(
-                coin?.market_data.market_cap[currency.toLowerCase()]
-                  .toString()
-                  .slice(0, -6)
-              )}
-              M
-            </Typography>
-          </span>
-          <span style={{ display: "flex" }}>
-          {user && (
+            {user && (
               <Button
                 variant="contained"
                 sx={{
                   marginTop: 2,
                   width: "100%",
                   height: 40,
-                  backgroundColor: "goldenrod",
+                  backgroundColor: isCoinInWatchlist ? "red" : "goldenrod",
                   color: "black",
                   ":hover": {
-                    backgroundColor: "gold",
+                    backgroundColor: isCoinInWatchlist ? "red" : "gold",
                   },
                 }}
+                onClick={toggleWatchlist}
               >
-                Add to Watchlist
+                {isCoinInWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
               </Button>
             )}
           </span>
-        </CoinMarketData>
+        </div>
       </CoinSidebar>
-
-      {/* chart */}
       <CoinInfo coin={coin} />
     </CoinContainer>
-  );
+  ); 
 };
 
 export default CoinPage;

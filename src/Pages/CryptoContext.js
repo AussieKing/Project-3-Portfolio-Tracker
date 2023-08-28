@@ -1,60 +1,80 @@
-//! CRYPTO CONTEXT PAGE
+//! CRYPTOCONTEXT
+//? This is the context provider for the entire app. It provides the following:
+//? - The user's currency preference
+//? - The user's watchlist
+//? - The user's authentication status
+//? - The user's alert status
+//? - The user's watchlist
 
 import { onAuthStateChanged } from '@firebase/auth';
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import { auth } from '../firebase';
+import { onSnapshot, doc } from '@firebase/firestore';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { auth, db } from '../firebase';
 
 const Crypto = createContext();
 
 const CryptoContext = ({ children }) => {
-  // create the state and the functions to update the state for the currency and the symbols
   const [currency, setCurrency] = useState('USD');
-  const [symbol, setSymbol] = useState("$");
-  //TODO : new states for the coins and the loading
+  const [symbol, setSymbol] = useState('$');
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
-  const [alert, setAlert] = useState({open: false, message: '', type: 'success'});  // state for the alert snack bar 
+  const [alert, setAlert] = useState({ open: false, message: '', type: 'success' });
+  const [watchlist, setWatchlist] = useState([]);
 
-  useEffect(() => {  // monitor the auth state of the firebase auth
-    onAuthStateChanged(auth, user => {
-      if (user) {  // if the user exists
-        setUser(user);  // set the user state to the user
-      }
-      else {  // otherwise, set the user state to null
-        setUser(null);
-      }
+  useEffect(() => {
+    if (user) {
+      const coinRef = doc(db, 'watchlist', user.uid);
+      const unsubscribe = onSnapshot(coinRef, coin => {
+        if (coin.exists()) {
+          setWatchlist(coin.data().coins);
+        } else {
+          console.log('No items in the watchlist');
+        }
+      });
+      return () => unsubscribe();
     }
-      )  // takes the auth and gives a callback function
-}, [])
+  }, [user]);
 
-  useEffect(() => {  // useEffect to run whatever is rendered inside the component
-  
-  //! POTENTIAL ERROR HERE: do I need to add the fetchCoins function here???
-  if (currency === 'USD') setSymbol('$');
+  useEffect(() => {
+    if (currency === 'USD') setSymbol('$');
     else if (currency === 'EUR') setSymbol('€');
     else if (currency === 'GBP') setSymbol('£');
     else if (currency === 'AUD') setSymbol('A$');
-  }, [currency]);  // adding the currency as a dependency
+  }, [currency]);
 
-  return (  // wrapping the whole app in the Crypto context provider
-  <Crypto.Provider value={{
-    currency, 
-    symbol, 
-    setCurrency, 
-    coins, 
-    loading, 
-    alert, 
-    setAlert,
-    user,
-    }}
-  >
-    {children}
-  </Crypto.Provider>
-  )
-}
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <Crypto.Provider
+      value={{
+        currency,
+        symbol,
+        setCurrency,
+        coins,
+        loading,
+        alert,
+        setAlert,
+        user,
+        watchlist,
+      }}
+    >
+      {children}
+    </Crypto.Provider>
+  );
+};
 
 export default CryptoContext;
-export const CryptoState = () => {   // custom hook to get the state, create a new file called CryptoState.js
-  return useContext(Crypto); 
-}
+
+export const CryptoState = () => {
+  return useContext(Crypto);
+};
